@@ -31,6 +31,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
 
+    private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
+    private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
+    private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
+    private val CMT_SUPPORTED_DATA_MESSAGE_TYPES: List<String> =
+        Arrays.asList(RESULTS_CMT_DATA_MESSAGE_TYPE)
+
     companion object {
         private const val CHANNEL_NAME_KEY = "default_notification_channel_name"
         private const val CHANNEL_DESCRIPTION_KEY = "default_notification_channel_description"
