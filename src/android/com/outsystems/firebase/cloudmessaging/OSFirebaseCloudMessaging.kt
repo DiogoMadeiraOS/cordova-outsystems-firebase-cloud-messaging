@@ -32,8 +32,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var notificationPermission = OSNotificationPermissions()
 
     companion object {
-        private const val CHANNEL_NAME_KEY = "notification_channel_name"
-        private const val CHANNEL_DESCRIPTION_KEY = "notification_channel_description"
+        private const val CHANNEL_NAME_KEY = "default_notification_channel_name"
+        private const val CHANNEL_DESCRIPTION_KEY = "default_notification_channel_description"
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
@@ -213,8 +213,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun setupChannelNameAndDescription(){
-        val channelName = getActivity().getString(getStringResourceId("notification_channel_name"))
-        val channelDescription = getActivity().getString(getStringResourceId("notification_channel_description"))
+        val channelName = getActivity().getString(getStringResourceId("default_notification_channel_name"))
+        val channelDescription = getActivity().getString(getStringResourceId("default_notification_channel_description"))
 
         if(!channelName.isNullOrEmpty()){
             val editorName = getActivity().getSharedPreferences(CHANNEL_NAME_KEY, Context.MODE_PRIVATE).edit()
