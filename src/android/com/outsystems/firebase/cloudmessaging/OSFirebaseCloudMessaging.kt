@@ -48,6 +48,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
+        private const val TAG = "OSFirebaseCloudMessaging"
     }
     private fun getStringResource(name: String): String {
         return this.getString(
@@ -275,6 +276,5 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             null
         }
     }
-companion object {
-        private const val TAG = "FirebasePlugin"}
+
 }
