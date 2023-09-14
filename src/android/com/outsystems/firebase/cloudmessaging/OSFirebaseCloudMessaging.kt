@@ -18,6 +18,10 @@ import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
 import org.json.JSONArray
 
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+
 
 class OSFirebaseCloudMessaging : CordovaImplementation() {
 
@@ -44,7 +48,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
     }
-
+    private fun getStringResource(name: String): String {
+        return this.getString(
+            this.getResources().getIdentifier(
+                name, "string", this.getPackageName()
+            )
+        )
+    }
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         databaseManager = DatabaseManager.getInstance(getActivity())
@@ -260,11 +270,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             properties.put("text", text)
             properties.put("title", title)
             properties
-        } else {
-            Log.d(
-                TAG,
-                "Unsupported CMT Data Message Trigger Type: $triggerType"
-            )
+        } 
             null
         }
     }
