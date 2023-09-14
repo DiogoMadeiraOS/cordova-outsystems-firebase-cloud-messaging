@@ -15,13 +15,13 @@ module.exports = function (context) {
     var stringsXmlContents = fs.readFileSync(stringsXmlPath).toString();
     var etreeStrings = et.parse(stringsXmlContents);
 
-    var dataTags = etreeStrings.findall('./string[@name="notification_channel_name"]');
+    var dataTags = etreeStrings.findall('./string[@name="default_notification_channel_name"]');
     for (var i = 0; i < dataTags.length; i++) {
         var data = dataTags[i];
         data.text = channelName;
     }
 
-    var dataTagsSecond = etreeStrings.findall('./string[@name="notification_channel_description"]');
+    var dataTagsSecond = etreeStrings.findall('./string[@name="default_notification_channel_description"]');
     for (var i = 0; i < dataTagsSecond.length; i++) {
         var data = dataTagsSecond[i];
         data.text = channelDescription;
