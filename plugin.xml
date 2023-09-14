@@ -79,9 +79,15 @@
       <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     </config-file>
 
+    <service android:name="OSFirebaseCloudMessaging"> 
+      <intent-filter> 
+        <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
+      </intent-filter> 
+    </service>
+
     <config-file parent="/resources" target="res/values/strings.xml">
-      <string name="notification_channel_name">Channel name</string>
-      <string name="notification_channel_description">Channel description</string>
+      <string name="default_notification_channel_name">Channel name</string>
+      <string name="default_notification_channel_description">Channel description</string>
     </config-file>
 
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
