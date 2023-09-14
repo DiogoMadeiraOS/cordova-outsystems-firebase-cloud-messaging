@@ -3,6 +3,7 @@ package com.outsystems.firebase.cloudmessaging;
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.PermissionResult
 import com.outsystems.osnotificationpermissions.OSNotificationPermissions
