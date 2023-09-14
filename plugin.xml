@@ -86,8 +86,8 @@
     </service>
 
     <config-file parent="/resources" target="res/values/strings.xml">
-      <string name="default_notification_channel_name">Channel name</string>
-      <string name="default_notification_channel_description">Channel description</string>
+      <string name="default_notification_channel_name">default_notification_channel_name</string>
+      <string name="default_notification_channel_description">default_notification_channel_description</string>
     </config-file>
 
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
