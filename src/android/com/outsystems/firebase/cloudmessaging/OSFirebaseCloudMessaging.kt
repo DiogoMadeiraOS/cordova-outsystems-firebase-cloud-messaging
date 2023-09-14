@@ -275,4 +275,6 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             null
         }
     }
+companion object {
+        private const val TAG = "FirebasePlugin"}
 }
