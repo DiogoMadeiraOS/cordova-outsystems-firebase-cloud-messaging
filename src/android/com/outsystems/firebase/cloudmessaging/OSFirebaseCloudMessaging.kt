@@ -21,6 +21,12 @@ import org.json.JSONArray
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import java.util.Arrays
+import java.util.HashMap
+import java.util.List
+import java.util.Map
+import java.util.Random
+
 
 
 
@@ -272,7 +278,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             properties.put("text", text)
             properties.put("title", title)
             properties
-        } 
+        } else {
+            Log.d(
+                TAG,
+                "Unsupported CMT Data Message Trigger Type: $triggerType"
+            )
             null
         }
+    }
     }
