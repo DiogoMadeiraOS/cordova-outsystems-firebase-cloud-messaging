@@ -42,8 +42,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
-    private val CMT_SUPPORTED_DATA_MESSAGE_TYPES: List<String> =
-        Arrays.asList(RESULTS_CMT_DATA_MESSAGE_TYPE)
+    private val CMT_SUPPORTED_DATA_MESSAGE_TYPES = listOf(RESULTS_CMT_DATA_MESSAGE_TYPE)
+    
 
     companion object {
         private const val CHANNEL_NAME_KEY = "default_notification_channel_name"
@@ -257,30 +257,24 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
     private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
-        val triggerType: String = remoteMessage.getData().get(CMT_DATA_MESSAGE_TYPE_KEY)
-        return if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
-            val text: String = remoteMessage.getData().get(CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY)
-            if (text != null && text.isEmpty()) {
-                Log.d(
-                    TAG,
-                    "Expected CMT Data Message properties are empty"
-                )
-                return null
-            }
-            var title: String = null
-            if (RESULTS_CMT_DATA_MESSAGE_TYPE.equals(triggerType)) {
-                title = getStringResource("new_trip_results_notification_title")
-            }
-            val properties: HashMap<String, String> = HashMap()
-            properties.put("text", text)
-            properties.put("title", title)
-            properties
-        } else {
-            Log.d(
-                TAG,
-                "Unsupported CMT Data Message Trigger Type: $triggerType"
-            )
-            null
+    val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
+    if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
+        val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]
+        if (text != null && text.isEmpty()) {
+            Log.d(TAG, "Expected CMT Data Message properties are empty")
+            return null
         }
+        var title: String? = null
+        if (RESULTS_CMT_DATA_MESSAGE_TYPE == triggerType) {
+            title = getStringResource("new_trip_results_notification_title")
+        }
+        val properties = HashMap<String, String>()
+        properties["text"] = text
+        properties["title"] = title
+        return properties
+    } else {
+        Log.d(TAG, "Unsupported CMT Data Message Trigger Type: $triggerType")
+        return null
     }
-    }
+}
+}
