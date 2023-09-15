@@ -15,6 +15,7 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
+
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
@@ -53,9 +54,11 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
         private const val TAG = "OSFirebaseCloudMessaging"
     }
+    
     private fun getStringResource(name: String): String {
-        return getString(resources.getIdentifier(name, "string", packageName))
+        return android.content.Context.getString(resources.getIdentifier(name, "string", android.content.Context.getPackageName()))
     }
+    
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         databaseManager = DatabaseManager.getInstance(getActivity())
