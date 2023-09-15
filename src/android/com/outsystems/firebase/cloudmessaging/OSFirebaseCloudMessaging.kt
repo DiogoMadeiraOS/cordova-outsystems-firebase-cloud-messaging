@@ -268,8 +268,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             title = "New trip"  // getStringResource("new_trip_results_notification_title")
         }
         val properties: HashMap<String, String> = HashMap<String, String>()
-        properties.put("text", text)
-        properties.put("title",title)
+        properties.put("text", text.toString())
+        properties.put("title",title.toString())
         return properties
     } else {
         Log.d(TAG, "Unsupported CMT Data Message Trigger Type: $triggerType")
