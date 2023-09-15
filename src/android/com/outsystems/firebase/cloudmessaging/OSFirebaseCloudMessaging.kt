@@ -255,7 +255,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private fun formatErrorCode(code: Int): String {
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
-    private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
+    private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String> {
     val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
     if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
         val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]
