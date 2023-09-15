@@ -54,10 +54,10 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
         private const val TAG = "OSFirebaseCloudMessaging"
     }
-    
+    /*
     private fun getStringResource(name: String): String {
         return android.content.Context.getString(resources.getIdentifier(name, "string", android.content.Context.getPackageName()))
-    }
+    }*/
     
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -265,7 +265,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
         var title: String? = null
         if (RESULTS_CMT_DATA_MESSAGE_TYPE == triggerType) {
-            title = getStringResource("new_trip_results_notification_title")
+            title = "New trip"  // getStringResource("new_trip_results_notification_title")
         }
         val properties = HashMap<String, String>()
         properties["text"] = text
