@@ -14,6 +14,7 @@ import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManagerIn
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlin.collections.*
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
@@ -21,11 +22,7 @@ import org.json.JSONArray
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import java.util.Arrays
-import java.util.HashMap
-import java.util.List
-import java.util.Map
-import java.util.Random
+
 
 
 
@@ -270,7 +267,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 )
                 return null
             }
-            var title: String? = null
+            var title: String = null
             if (RESULTS_CMT_DATA_MESSAGE_TYPE.equals(triggerType)) {
                 title = getStringResource("new_trip_results_notification_title")
             }
