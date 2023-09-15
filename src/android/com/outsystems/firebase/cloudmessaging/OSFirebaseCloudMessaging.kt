@@ -215,6 +215,95 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
+    @Override
+    fun onMessageReceived(remoteMessage: RemoteMessage) {
+        // [START_EXCLUDE]
+        // There are two types of messages data messages and notification messages. Data messages are handled
+        // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
+        // traditionally used with GCM. Notification messages are only received here in onMessageReceived when the app
+        // is in the foreground. When the app is in the background an automatically generated notification is displayed.
+        // When the user taps on the notification they are returned to the app. Messages containing both notification
+        // and data payloads are treated as notification messages. The Firebase console always sends notification
+        // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
+        // [END_EXCLUDE]
+        Log.d(TAG, "FirebasePluginMessagingService onMessageReceived called")
+
+        // Pass the message to the receiver manager so any registered receivers can decide to handle it
+        val wasHandled: Boolean =
+            FirebasePluginMessageReceiverManager.onMessageReceived(remoteMessage)
+        if (wasHandled) {
+            Log.d(TAG, "Message was handled by a registered receiver")
+
+            // Don't process the message in this method.
+            return
+        }
+
+        // TODO(developer): Handle FCM messages here.
+        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+        var title: String
+        var text: String
+        var id: String
+        var sound: String? = null
+        var lights: String? = null
+        val data: Map<String, String> = remoteMessage.getData()
+        if (remoteMessage.getNotification() != null) {
+            title = remoteMessage.getNotification().getTitle()
+            text = remoteMessage.getNotification().getBody()
+            id = remoteMessage.getMessageId()
+        } else {
+            title = data["title"]
+            text = data["text"]
+            id = data["id"]
+            sound = data["sound"]
+            lights =
+                data["lights"] //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+            if (TextUtils.isEmpty(text)) {
+                text = data["body"]
+            }
+            if (TextUtils.isEmpty(text)) {
+                text = data["message"]
+            }
+        }
+        if (TextUtils.isEmpty(id)) {
+            val rand = Random()
+            val n: Int = rand.nextInt(50) + 1
+            id = Integer.toString(n)
+        }
+        val badge = data["badge"]
+        if (isCMTNDataMessage(remoteMessage)) {
+            data.put("provider", "CMT")
+            //Turn this data messages to notifications only if the app is not in the foreground
+            if (FirebasePlugin.inBackground()) {
+                val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
+                if (messageContents != null) {
+                    Log.d(TAG, "Data Message received from CMT")
+                    title = messageContents.get("title")
+                    text = messageContents.get("text")
+                }
+            }
+        }
+        Log.d(TAG, "From: " + remoteMessage.getFrom())
+        Log.d(TAG, "Notification Message id: $id")
+        Log.d(TAG, "Notification Message Title: $title")
+        Log.d(TAG, "Notification Message Body/Text: $text")
+        Log.d(TAG, "Notification Message Sound: $sound")
+        Log.d(TAG, "Notification Message Lights: $lights")
+        Log.d(TAG, "Notification Badge: $badge")
+        if (badge != null && !badge.isEmpty()) {
+            setBadgeNumber(badge)
+        }
+
+        // TODO: Add option to developer to configure if show notification when app on foreground
+        if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
+            val showNotification =
+                (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(
+                    text
+                ) || !TextUtils.isEmpty(title))
+            Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
+            sendNotification(id, title, text, data, showNotification, sound, lights)
+        }
+    }
+
     private fun sendLocalNotification(args : JSONArray) {
         val badge = args.get(0).toString().toInt()
         val title = args.get(1).toString()
@@ -255,6 +344,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private fun formatErrorCode(code: Int): String {
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
+
+    private fun isCMTNDataMessage(remoteMessage: RemoteMessage): Boolean {
+    return remoteMessage.data.containsKey(CMT_DATA_MESSAGE_TYPE_KEY)
+    }
+
+    
     private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
     val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
     if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
