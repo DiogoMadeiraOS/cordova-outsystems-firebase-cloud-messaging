@@ -267,7 +267,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (RESULTS_CMT_DATA_MESSAGE_TYPE == triggerType) {
             title = "New trip"  // getStringResource("new_trip_results_notification_title")
         }
-        val properties = HashMap<String, String>()
+        val properties: HashMap<String, String>()
         properties["text"] = text
         properties["title"] = title
         return properties
