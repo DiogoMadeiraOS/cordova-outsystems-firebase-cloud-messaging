@@ -54,11 +54,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val TAG = "OSFirebaseCloudMessaging"
     }
     private fun getStringResource(name: String): String {
-        return this.getString(
-            this.getResources().getIdentifier(
-                name, "string", this.getPackageName()
-            )
-        )
+        return getString(resources.getIdentifier(name, "string", packageName))
     }
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
