@@ -5,12 +5,15 @@ import com.google.firebase.messaging.RemoteMessage
 import java.util.ArrayList
 import java.util.List
 
-object FirebasePluginMessageReceiverManager {
-    private const val TAG = "FirebasePlugin"
+object OSFirebaseCloudMessageReceiverManager{
+    private const val TAG = "OSFirebaseCloudMessaging"
+
+    companion object{
+        
     private val receivers: List<FirebasePluginMessageReceiver> =
         ArrayList<FirebasePluginMessageReceiver>()
 
-    fun register(receiver: FirebasePluginMessageReceiver?) {
+    fun register(receiver: OSFirebaseCloudMessageReceiver?) {
         Log.d(TAG, "FirebasePluginMessageReceiverManager register called")
         receivers.add(receiver)
     }
@@ -29,5 +32,6 @@ object FirebasePluginMessageReceiverManager {
             "FirebasePluginMessageReceiverManager onMessageReceived handled: " + if (handled) "true" else "false"
         )
         return handled
+    }
     }
 }
