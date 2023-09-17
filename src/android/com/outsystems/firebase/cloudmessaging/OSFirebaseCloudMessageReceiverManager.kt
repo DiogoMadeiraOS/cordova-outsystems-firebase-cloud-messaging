@@ -5,10 +5,10 @@ import com.google.firebase.messaging.RemoteMessage
 import java.util.ArrayList
 import java.util.List
 
- class OSFirebaseCloudMessageReceiverManager {
+ object OSFirebaseCloudMessageReceiverManager {
     private const val TAG = "OSFirebaseCloudMessaging"
 
-    companion object{
+    
         
     private val receivers: List<FirebasePluginMessageReceiver> =
         ArrayList<FirebasePluginMessageReceiver>()
@@ -17,21 +17,21 @@ import java.util.List
         Log.d(TAG, "FirebasePluginMessageReceiverManager register called")
         receivers.add(receiver)
     }
-
-    fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean {
-        Log.d(TAG, "FirebasePluginMessageReceiverManager onMessageReceived called")
-        var handled = false
-        for (receiver in receivers) {
-            val wasHandled: Boolean = receiver.onMessageReceived(remoteMessage)
-            if (wasHandled) {
-                handled = true
-            }
-        }
-        Log.d(
-            TAG,
-            "FirebasePluginMessageReceiverManager onMessageReceived handled: " + if (handled) "true" else "false"
-        )
-        return handled
-    }
+    companion object MessageReceived {
+      fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean {
+          Log.d(TAG, "FirebasePluginMessageReceiverManager onMessageReceived called")
+          var handled = false
+          for (receiver in receivers) {
+              val wasHandled: Boolean = receiver.onMessageReceived(remoteMessage)
+              if (wasHandled) {
+                  handled = true
+              }
+          }
+          Log.d(
+              TAG,
+              "FirebasePluginMessageReceiverManager onMessageReceived handled: " + if (handled) "true" else "false"
+          )
+          return handled
+      }
     }
 }
