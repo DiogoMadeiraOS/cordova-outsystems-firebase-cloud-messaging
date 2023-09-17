@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.text.TextUtils
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.PermissionResult
 import com.outsystems.osnotificationpermissions.OSNotificationPermissions
@@ -15,6 +16,8 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
+
+import java.util.Random
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
@@ -247,13 +250,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var lights: String? = null
         val data: Map<String, String> = remoteMessage.getData()
         if (remoteMessage.getNotification() != null) {
-            title = remoteMessage.getNotification().getTitle()
-            text = remoteMessage.getNotification().getBody()
-            id = remoteMessage.getMessageId()
+            title = remoteMessage.getNotification().getTitle().ToString()
+            text = remoteMessage.getNotification().getBody().ToString()
+            id = remoteMessage.getMessageId().ToString()
         } else {
-            title = data["title"]
-            text = data["text"]
-            id = data["id"]
+            title = data["title"].ToString()
+            text = data["text"].ToString()
+            id = data["id"].ToString()
             sound = data["sound"]
             lights =
                 data["lights"] //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
@@ -273,7 +276,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-            if (FirebasePlugin.inBackground()) {
+            if (OSFirebaseCloudMessaging.inBackground()) {
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
@@ -296,11 +299,11 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
             val showNotification =
-                (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(
+                (OSFirebaseCloudMessaging.inBackground() || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
-            sendNotification(id, title, text, data, showNotification, sound, lights)
+            sendLocalNotification(id, title, text, data, showNotification, sound, lights)
         }
     }
 
