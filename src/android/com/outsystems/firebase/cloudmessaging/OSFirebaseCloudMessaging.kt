@@ -230,7 +230,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         // Pass the message to the receiver manager so any registered receivers can decide to handle it
         val wasHandled: Boolean =
-            FirebasePluginMessageReceiverManager.onMessageReceived(remoteMessage)
+            OSFirebaseCloudMessageReceiverManager.onMessageReceived(remoteMessage)
         if (wasHandled) {
             Log.d(TAG, "Message was handled by a registered receiver")
 
