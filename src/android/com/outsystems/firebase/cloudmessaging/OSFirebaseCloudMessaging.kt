@@ -250,13 +250,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var lights: String? = null
         val data: Map<String, String> = remoteMessage.getData()
         if (remoteMessage.getNotification() != null) {
-            title = remoteMessage.getNotification().getTitle().ToString()
-            text = remoteMessage.getNotification().getBody().ToString()
-            id = remoteMessage.getMessageId().ToString()
+            title = remoteMessage.getNotification().getTitle().toString()
+            text = remoteMessage.getNotification().getBody().toString()
+            id = remoteMessage.getMessageId().toString()
         } else {
-            title = data["title"].ToString()
-            text = data["text"].ToString()
-            id = data["id"].ToString()
+            title = data["title"].toString()
+            text = data["text"].toString()
+            id = data["id"].toString()
             sound = data["sound"]
             lights =
                 data["lights"] //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
