@@ -248,7 +248,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var id: String
         var sound: String? = null
         var lights: String? = null
-        val data: Map<String, String> = remoteMessage.getData()
+        val data: mutableMapOf<String, String> = remoteMessage.getData()
         if (remoteMessage.getNotification() != null) {
             title = remoteMessage.getNotification().getTitle().toString()
             text = remoteMessage.getNotification().getBody().toString()
@@ -261,10 +261,10 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             lights =
                 data["lights"] //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
             if (TextUtils.isEmpty(text)) {
-                text = data["body"]
+                text = data["body"].toString()
             }
             if (TextUtils.isEmpty(text)) {
-                text = data["message"]
+                text = data["message"].toString()
             }
         }
         if (TextUtils.isEmpty(id)) {
@@ -280,8 +280,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
-                    title = messageContents.get("title")
-                    text = messageContents.get("text")
+                    title = messageContents.get("title").toString()
+                    text = messageContents.get("text").toString()
                 }
             }
         }
@@ -303,7 +303,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
-            sendLocalNotification(id, title, text, data, showNotification, sound, lights)
+            sendLocalNotification(badge, title, text, null, showNotification, sound, lights)
         }
     }
 
@@ -313,7 +313,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val text = args.get(2).toString()
         val channelName = args.get(3).toString()
         val channelDescription = args.get(4).toString()
-        controller.sendLocalNotification(badge, title, text, null, channelName, channelDescription)
+        controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_NAME_DESCRIPTION)
     }
 
     private fun clearNotifications() {
