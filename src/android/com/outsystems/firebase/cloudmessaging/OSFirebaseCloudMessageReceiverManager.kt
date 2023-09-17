@@ -5,7 +5,7 @@ import com.google.firebase.messaging.RemoteMessage
 import java.util.ArrayList
 import java.util.List
 
-object OSFirebaseCloudMessageReceiverManager{
+object OSFirebaseCloudMessageReceiverManager {
     private const val TAG = "OSFirebaseCloudMessaging"
 
     companion object{
