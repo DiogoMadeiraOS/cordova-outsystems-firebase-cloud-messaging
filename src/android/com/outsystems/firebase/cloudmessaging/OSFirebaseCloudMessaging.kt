@@ -43,6 +43,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
 
+    var inBackground= true
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
@@ -135,6 +136,15 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
 
     }
+
+    override fun onPause(){
+        inBackground = true
+    }
+
+    override fun onResume(){
+        inBackground = false
+    }
+    
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         this.callbackContext = callbackContext
@@ -248,7 +258,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var id: String
         var sound: String? = null
         var lights: String? = null
-        val data: mutableMapOf<String, String> = remoteMessage.getData()
+        val data: HashMap<String, String> = remoteMessage.getData()
         if (remoteMessage.getNotification() != null) {
             title = remoteMessage.getNotification().getTitle().toString()
             text = remoteMessage.getNotification().getBody().toString()
@@ -276,7 +286,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-            if (OSFirebaseCloudMessaging.inBackground()) {
+            if (inBackground) {
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
@@ -293,26 +303,21 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         Log.d(TAG, "Notification Message Lights: $lights")
         Log.d(TAG, "Notification Badge: $badge")
         if (badge != null && !badge.isEmpty()) {
-            setBadgeNumber(badge)
+            setBadgeNumber() //setBadgeNumber(badge)
         }
 
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
             val showNotification =
-                (OSFirebaseCloudMessaging.inBackground() || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
+                (inBackground || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
-            sendLocalNotification(badge, title, text, null, showNotification, sound, lights)
+            sendLocalNotification(badge, title, text)
         }
     }
 
-    private fun sendLocalNotification(args : JSONArray) {
-        val badge = args.get(0).toString().toInt()
-        val title = args.get(1).toString()
-        val text = args.get(2).toString()
-        val channelName = args.get(3).toString()
-        val channelDescription = args.get(4).toString()
+    private fun sendLocalNotification(badge: String, title: String, text: String) {
         controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_DESCRIPTION_KEY)
     }
 
