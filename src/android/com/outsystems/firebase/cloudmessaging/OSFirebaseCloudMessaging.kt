@@ -17,7 +17,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import kotlin.collections.mutableMapOf
-import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging
 import java.util.Random
 
 import org.apache.cordova.CallbackContext
@@ -314,7 +313,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val text = args.get(2).toString()
         val channelName = args.get(3).toString()
         val channelDescription = args.get(4).toString()
-        controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_NAME_DESCRIPTION)
+        controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_DESCRIPTION_KEY)
     }
 
     private fun clearNotifications() {
