@@ -313,11 +313,14 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
-            sendLocalNotification(badge, title, text)
+            sendLocalNotification(badge.toString(), title, text)
         }
     }
 
-    private fun sendLocalNotification(badge: String, title: String, text: String) {
+    private fun sendLocalNotification(args : JSONArray) {
+        val badge = args.get(0).toString().toInt()
+        val title = args.get(1).toString().toInt()
+        val text = args.get(2).toString().toInt()
         controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_DESCRIPTION_KEY)
     }
 
