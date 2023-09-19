@@ -307,9 +307,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
             val jsonArray = JSONArray()
 
-            jsonArray.put(badge)
-            jsonArray.put(title)
-            jsonArray.put(text)
+            jsonArray.put(badge as Any)
+            jsonArray.put(title as Any)
+            jsonArray.put(text as Any)
             
             sendLocalNotification( jsonArray)
         }
