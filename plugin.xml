@@ -65,6 +65,9 @@
   <platform name="android">
 
     <hook type="after_prepare" src="hooks/android/androidCopyChannelInfo.js" />
+
+   
+
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="OSFirebaseCloudMessaging">
         <param name="android-package" value="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"/>

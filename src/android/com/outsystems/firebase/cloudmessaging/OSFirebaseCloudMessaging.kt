@@ -22,6 +22,8 @@ import java.util.Random
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
+import org.apache.cordova.firebase.OSFirebaseCloudMessageReceiverManager
+
 import org.json.JSONArray
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -43,7 +45,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
 
-    var inBackground= true
+    
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
@@ -286,7 +288,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-            if (inBackground) {
+            if (AppForegroundStateManager.isAppInForeground()) {
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
@@ -309,7 +311,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
             val showNotification =
-                (inBackground || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
+                (AppForegroundStateManager.isAppInForeground() || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
@@ -319,8 +321,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     private fun sendLocalNotification(args : JSONArray) {
         val badge = args.get(0).toString().toInt()
-        val title = args.get(1).toString().toInt()
-        val text = args.get(2).toString().toInt()
+        val title = args.get(1).toString()
+        val text = args.get(2).toString()
         controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_DESCRIPTION_KEY)
     }
 
