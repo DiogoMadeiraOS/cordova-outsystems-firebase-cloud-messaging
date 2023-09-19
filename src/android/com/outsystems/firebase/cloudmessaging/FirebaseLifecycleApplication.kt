@@ -3,6 +3,7 @@ package com.outsystems.firebase.cloudmessaging;
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 
 class FirebaseLifecycleApplication : Application.ActivityLifecycleCallbacks {

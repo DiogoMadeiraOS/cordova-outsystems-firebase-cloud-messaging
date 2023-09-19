@@ -131,12 +131,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             triggerEvent(event)
         }
         eventQueue.clear()
-        if (foregroundCount == 0) {
-            // App goes from background to foreground
-            // You can trigger actions here
-            AppForegroundStateManager.setAppInForeground(true)
-        }
-        foregroundCount++
+
         if(Build.VERSION.SDK_INT >= 33 &&
             !notificationPermission.hasNotificationPermission(this)) {
 
