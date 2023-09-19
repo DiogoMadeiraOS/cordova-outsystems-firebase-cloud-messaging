@@ -17,6 +17,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import kotlin.collections.mutableMapOf
+import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
 
 import java.util.Random
 
@@ -45,7 +46,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-    val receiverManager= OSFirebaseCloudMessageReceiverManager()
+    private var receiverManager = OSFirebaseCloudMessageReceiverManager()
     
     
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
