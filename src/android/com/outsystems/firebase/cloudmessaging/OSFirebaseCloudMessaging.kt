@@ -303,7 +303,14 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
-            sendLocalNotification(badge.toString(), title, text)
+
+            val jsonArray = JSONArray()
+
+            jsonArray.put(badge)
+            jsonArray.put(title)
+            jsonArray.put(text)
+            
+            sendLocalNotification( jsonArray)
         }
     }
 
