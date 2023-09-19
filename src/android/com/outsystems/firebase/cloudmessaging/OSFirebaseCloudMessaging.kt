@@ -22,7 +22,9 @@ import java.util.Random
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
-import org.apache.cordova.firebase.OSFirebaseCloudMessageReceiverManager
+import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
+import com.AppForegroundStateManager
+
 
 import org.json.JSONArray
 
@@ -138,15 +140,6 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
 
     }
-
-    override fun onPause(){
-        inBackground = true
-    }
-
-    override fun onResume(){
-        inBackground = false
-    }
-    
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         this.callbackContext = callbackContext
