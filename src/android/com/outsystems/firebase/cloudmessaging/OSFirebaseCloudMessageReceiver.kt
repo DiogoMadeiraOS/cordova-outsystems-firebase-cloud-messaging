@@ -5,7 +5,8 @@ import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverMana
 
 abstract class OSFirebaseCloudMessageReceiver {
     init {
-        OSFirebaseCloudMessageReceiverManager.register(this)
+        private var receiverManager = OSFirebaseCloudMessageReceiverManager()
+        receiverManager.register(this)
     }
 
     /**
@@ -14,7 +15,7 @@ abstract class OSFirebaseCloudMessageReceiver {
      * @param remoteMessage
      * @return true if the received message was handled by the receiver so should not be handled by FirebasePlugin.
      */
-     companion object{
-        abstract fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean
-     }
+     
+    abstract fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean
+     
 }

@@ -7,11 +7,13 @@ import java.util.List
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiver
 
  class OSFirebaseCloudMessageReceiverManager {
+    companion object{
     private const val TAG = "OSFirebaseCloudMessaging"
+    }
 
     
         
-    private val receivers: List<OSFirebaseCloudMessageReceiver> =
+    private val receivers: ArrayList<OSFirebaseCloudMessageReceiver> =
         ArrayList<OSFirebaseCloudMessageReceiver>()
 
     fun register(receiver: OSFirebaseCloudMessageReceiver?) {
