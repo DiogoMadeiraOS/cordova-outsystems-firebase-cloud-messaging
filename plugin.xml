@@ -98,6 +98,7 @@
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/FirebaseLifecycleApplication.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessageReceiver.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessageReceiverManager.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/AppForegroundStateManager.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <framework src="src/android/com/outsystems/firebase/cloudmessaging/build.gradle" custom="true" type="gradleReference" />
 
   </platform>
