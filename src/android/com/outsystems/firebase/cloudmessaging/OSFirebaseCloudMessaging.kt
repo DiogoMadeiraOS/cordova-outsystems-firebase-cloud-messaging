@@ -62,10 +62,6 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
         private const val TAG = "OSFirebaseCloudMessaging"
     }
-    /*
-    private fun getStringResource(name: String): String {
-        return android.content.Context.getString(resources.getIdentifier(name, "string", android.content.Context.getPackageName()))
-    }*/
     
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -304,7 +300,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
             val showNotification =
-                (AppForegroundStateManager.isAppInForeground() || !OSFirebaseCloudMessaging.hasNotificationsCallback()) && (!TextUtils.isEmpty(
+                (AppForegroundStateManager.isAppInForeground()/* || !OSFirebaseCloudMessaging.hasNotificationsCallback() */) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
