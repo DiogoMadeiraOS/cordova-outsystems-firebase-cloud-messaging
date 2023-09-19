@@ -16,11 +16,11 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
-import kotlin.collections.mutableMapOf
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
 import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 
 import java.util.Random
+
 
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
@@ -251,7 +251,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var id: String
         var sound: String? = null
         var lights: String? = null
-        var data: mutableMapOf<String, String> = remoteMessage.getData().filterValues { it != null }.mapValues { it.value!! }
+        var data: mutableMapOf<String, String>()
+        data = remoteMessage.getData().filterValues { it != null }.mapValues { it.value!! }
 
         val notification = remoteMessage.notification
         if (notification != null) {
