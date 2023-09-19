@@ -23,7 +23,7 @@ import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
-import com.AppForegroundStateManager
+import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 
 
 import org.json.JSONArray

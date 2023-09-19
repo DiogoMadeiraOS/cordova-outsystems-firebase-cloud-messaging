@@ -1,3 +1,5 @@
+package com.outsystems.firebase.cloudmessaging;
+
 object AppForegroundStateManager {
     private var isAppInForeground = false
 
