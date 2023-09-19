@@ -54,13 +54,15 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
     private val CMT_SUPPORTED_DATA_MESSAGE_TYPES = listOf(RESULTS_CMT_DATA_MESSAGE_TYPE)
+    private var foregroundCount = 0
+
     
 
     companion object {
         private const val CHANNEL_NAME_KEY = "default_notification_channel_name"
         private const val CHANNEL_DESCRIPTION_KEY = "default_notification_channel_description"
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
-        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
+        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1231234
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
         private const val TAG = "OSFirebaseCloudMessaging"
     }
@@ -128,7 +130,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             triggerEvent(event)
         }
         eventQueue.clear()
-
+        if (foregroundCount == 0) {
+            // App goes from background to foreground
+            // You can trigger actions here
+            AppForegroundStateManager.setAppInForeground(true)
+        }
+        foregroundCount++
         if(Build.VERSION.SDK_INT >= 33 &&
             !notificationPermission.hasNotificationPermission(this)) {
 
@@ -287,13 +294,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-            if (AppForegroundStateManager.isAppInForeground()) {
+           // if (AppForegroundStateManager.isAppInForeground()) { TEST
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
-                    title = messageContents.get("title").toString()
-                    text = messageContents.get("text").toString()
-                }
+                    title = "YAY"//messageContents.get("title").toString()
+                    text = "Finally working :)"//messageContents.get("text").toString()
+            //    }
             }
         }
         Log.d(TAG, "From: " + remoteMessage.getFrom())
@@ -329,7 +336,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val badge = args.get(0).toString().toInt()
         val title = args.get(1).toString()
         val text = args.get(2).toString()
-        controller.sendLocalNotification(badge, title, text, null, CHANNEL_NAME_KEY, CHANNEL_DESCRIPTION_KEY)
+        controller.sendLocalNotification(badge, title, text, null, "Services", "Services")
     }
 
     private fun clearNotifications() {
@@ -341,8 +348,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun setupChannelNameAndDescription(){
-        val channelName = getActivity().getString(getStringResourceId("default_notification_channel_name"))
-        val channelDescription = getActivity().getString(getStringResourceId("default_notification_channel_description"))
+        val channelName = "Services"
+        val channelDescription = "Services"
 
         if(!channelName.isNullOrEmpty()){
             val editorName = getActivity().getSharedPreferences(CHANNEL_NAME_KEY, Context.MODE_PRIVATE).edit()
