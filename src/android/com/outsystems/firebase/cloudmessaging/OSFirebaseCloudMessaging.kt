@@ -54,7 +54,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
     private val CMT_SUPPORTED_DATA_MESSAGE_TYPES = listOf(RESULTS_CMT_DATA_MESSAGE_TYPE)
-    private var foregroundCount = 0
+
 
     
 
@@ -125,6 +125,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun ready() {
+        Log.d(TAG,"OSFCM - ready started")
         deviceReady = true
         eventQueue.forEach { event ->
             triggerEvent(event)
@@ -230,6 +231,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     @Override
     fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d(TAG,"OSFCM - onMessageReceived started")
+
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
         // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
@@ -294,13 +297,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-           // if (AppForegroundStateManager.isAppInForeground()) { TEST
+            if (AppForegroundStateManager.isAppInForeground()) { 
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d(TAG, "Data Message received from CMT")
                     title = "YAY"//messageContents.get("title").toString()
                     text = "Finally working :)"//messageContents.get("text").toString()
-            //    }
+                }
             }
         }
         Log.d(TAG, "From: " + remoteMessage.getFrom())
@@ -333,6 +336,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun sendLocalNotification(args : JSONArray) {
+        Log.d(TAG,"OSFCM - sendLocalNotification started")
+
         val badge = args.get(0).toString().toInt()
         val title = args.get(1).toString()
         val text = args.get(2).toString()
@@ -377,6 +382,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     
     private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
+        Log.d(TAG,"OSFCM - handleCMTDataMessage started")
+
     val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
     if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
         val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]

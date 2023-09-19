@@ -23,6 +23,8 @@ import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiver
     
       fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean {
           Log.d(TAG, "FirebasePluginMessageReceiverManager onMessageReceived called")
+          Log.d(TAG,"OSFCM - ready started")
+
           var handled = false
           for (receiver in receivers) {
               val wasHandled: Boolean = receiver.onMessageReceived(remoteMessage)
