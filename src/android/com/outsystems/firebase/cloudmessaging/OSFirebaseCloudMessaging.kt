@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import kotlin.collections.mutableMapOf
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
+import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 
 import java.util.Random
 

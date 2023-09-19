@@ -4,14 +4,15 @@ import android.util.Log
 import com.google.firebase.messaging.RemoteMessage
 import java.util.ArrayList
 import java.util.List
+import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiver
 
  class OSFirebaseCloudMessageReceiverManager {
     private const val TAG = "OSFirebaseCloudMessaging"
 
     
         
-    private val receivers: List<FirebasePluginMessageReceiver> =
-        ArrayList<FirebasePluginMessageReceiver>()
+    private val receivers: List<OSFirebaseCloudMessageReceiver> =
+        ArrayList<OSFirebaseCloudMessageReceiver>()
 
     fun register(receiver: OSFirebaseCloudMessageReceiver?) {
         Log.d(TAG, "FirebasePluginMessageReceiverManager register called")
