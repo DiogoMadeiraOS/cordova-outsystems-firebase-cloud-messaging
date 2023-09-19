@@ -251,7 +251,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var id: String
         var sound: String? = null
         var lights: String? = null
-        var data: mutableMapOf<String, String> = remoteMessage.getData().filterValues { it != null }.mapValues { it.value!! }
+        val data: MutableMap<String, String> = mutableMapOf()
+
+        remoteMessage.getData().forEach { (key, value) ->
+            if (value != null) {
+                data[key] = value
+            }
+}
 
         val notification = remoteMessage.notification
         if (notification != null) {
