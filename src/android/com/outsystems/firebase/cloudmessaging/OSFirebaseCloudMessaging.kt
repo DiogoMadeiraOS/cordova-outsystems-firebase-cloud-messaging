@@ -44,7 +44,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-
+    private val receiverManager = OSFirebaseCloudMessageReceiverManager()
     
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
@@ -245,7 +245,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         // Pass the message to the receiver manager so any registered receivers can decide to handle it
         val wasHandled: Boolean =
-            OSFirebaseCloudMessageReceiverManager.onMessageReceived(remoteMessage)
+            receiverManager.onMessageReceived(remoteMessage)
         if (wasHandled) {
             Log.d(TAG, "Message was handled by a registered receiver")
 

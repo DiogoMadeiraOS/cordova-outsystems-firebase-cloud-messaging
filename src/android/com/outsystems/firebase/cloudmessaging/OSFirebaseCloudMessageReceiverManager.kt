@@ -17,7 +17,7 @@ import java.util.List
         Log.d(TAG, "FirebasePluginMessageReceiverManager register called")
         receivers.add(receiver)
     }
-    companion object MessageReceived {
+    
       fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean {
           Log.d(TAG, "FirebasePluginMessageReceiverManager onMessageReceived called")
           var handled = false
@@ -33,5 +33,5 @@ import java.util.List
           )
           return handled
       }
-    }
+    
 }
