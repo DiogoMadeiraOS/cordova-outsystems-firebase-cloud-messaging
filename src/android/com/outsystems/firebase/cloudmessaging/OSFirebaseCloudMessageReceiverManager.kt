@@ -12,11 +12,11 @@ import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiver
     }
 
     
-        
+
     private val receivers: ArrayList<OSFirebaseCloudMessageReceiver> =
         ArrayList<OSFirebaseCloudMessageReceiver>()
 
-    fun register(receiver: OSFirebaseCloudMessageReceiver?) {
+    fun register(receiver: OSFirebaseCloudMessageReceiver) {
         Log.d(TAG, "FirebasePluginMessageReceiverManager register called")
         receivers.add(receiver)
     }
