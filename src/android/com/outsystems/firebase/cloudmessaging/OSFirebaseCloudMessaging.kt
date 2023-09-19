@@ -16,7 +16,6 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
-import kotlin.collections.mutableMapOf
 import java.util.Random
 
 import org.apache.cordova.CallbackContext
@@ -248,7 +247,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         var id: String
         var sound: String? = null
         var lights: String? = null
-        val data: HashMap<String, String> = remoteMessage.getData()
+        var data: Map<String, String> = remoteMessage.getData()
+
         if (remoteMessage.getNotification() != null) {
             title = remoteMessage.getNotification().getTitle().toString()
             text = remoteMessage.getNotification().getBody().toString()
