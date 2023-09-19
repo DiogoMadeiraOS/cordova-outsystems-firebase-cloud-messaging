@@ -22,8 +22,6 @@ import java.util.Random
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
-import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
-import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 
 
 import org.json.JSONArray
@@ -46,7 +44,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-    private val receiverManager = OSFirebaseCloudMessageReceiverManager()
+    val receiverManager= OSFirebaseCloudMessageReceiverManager()
+    
     
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
