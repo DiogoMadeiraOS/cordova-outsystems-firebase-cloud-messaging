@@ -16,6 +16,8 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
+import kotlin.collections.mutableMapOf
+
 import java.util.Random
 
 import org.apache.cordova.CallbackContext
