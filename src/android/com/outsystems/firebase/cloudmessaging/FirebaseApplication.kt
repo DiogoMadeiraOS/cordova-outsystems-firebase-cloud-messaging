@@ -1,6 +1,7 @@
 package com.outsystems.firebase.cloudmessaging;
 
 import android.app.Application
+import android.util.Log
 
 class FirebaseApplication : Application() {
 
