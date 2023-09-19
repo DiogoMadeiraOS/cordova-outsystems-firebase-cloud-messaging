@@ -59,8 +59,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     
 
     companion object {
-        private const val CHANNEL_NAME_KEY = "default_notification_channel_name"
-        private const val CHANNEL_DESCRIPTION_KEY = "default_notification_channel_description"
+        private const val CHANNEL_NAME_KEY = "Services"
+        private const val CHANNEL_DESCRIPTION_KEY = "Services"
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1231234
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
