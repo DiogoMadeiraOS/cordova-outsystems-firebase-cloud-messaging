@@ -235,8 +235,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
-    @Override
-    fun onMessageReceived(remoteMessage: RemoteMessage) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("OSFCM","OSFCM - onMessageReceived started")
 
         // [START_EXCLUDE]
