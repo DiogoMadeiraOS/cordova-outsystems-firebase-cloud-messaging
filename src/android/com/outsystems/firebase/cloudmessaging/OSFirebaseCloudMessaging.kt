@@ -25,8 +25,8 @@ import org.json.JSONArray
 
 class OSFirebaseCloudMessaging : CordovaImplementation() {
 
-
-    override fun onCreate() {
+/*
+    override fun onCreate//() {
         super.onCreate()
         // Initialize other components as needed
 
@@ -34,7 +34,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val application = applicationContext as Application
 
         // Register an ActivityLifecycleCallbacks listener
-        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks) {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 isAppInBackground = false
             }
@@ -54,17 +54,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             override fun onActivityStopped(activity: Activity) {
                 isAppInBackground = true
             }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                // Activity save instance state
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-                // Activity destroyed
-            }
-        })
+        }
     }
-
+ */
 
 
     override var callbackContext: CallbackContext? = null
