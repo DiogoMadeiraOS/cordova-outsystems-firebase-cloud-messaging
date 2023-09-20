@@ -69,8 +69,8 @@
    
 
     <config-file parent="/*" target="res/xml/config.xml">
-      <feature name="FirebaseApplication">
-        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.FirebaseApplication"/>
+      <feature name="OSFirebaseCMService">
+        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.OSFirebaseCMService"/>
 	      <param name="onload" value="true" />
       </feature>
       <preference name="GradlePluginKotlinEnabled" value="true" />
@@ -82,7 +82,7 @@
       <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     </config-file>
 
-    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"> 
+    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCMService"> 
       <intent-filter> 
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
@@ -93,6 +93,7 @@
       <string name="default_notification_channel_description">default_notification_channel_description</string>
     </config-file>
 
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCMService.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/FirebaseApplication.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/FirebaseLifecycleApplication.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
