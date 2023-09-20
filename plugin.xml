@@ -85,7 +85,7 @@
       <uses-permission android:name="android.permission.WAKE_LOCK" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"> 
+    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging" android:exported="true"> 
       <intent-filter> 
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
