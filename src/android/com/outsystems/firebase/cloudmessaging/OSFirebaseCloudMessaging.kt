@@ -1,5 +1,9 @@
 package com.outsystems.firebase.cloudmessaging;
 
+import android.app.Activity
+import android.app.Application
+import android.os.Bundle
+
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -21,6 +25,48 @@ import org.json.JSONArray
 
 class OSFirebaseCloudMessaging : CordovaImplementation() {
 
+
+    override fun onCreate() {
+        super.onCreate()
+        // Initialize other components as needed
+
+        // Get a reference to the Application instance
+        val application = applicationContext as Application
+
+        // Register an ActivityLifecycleCallbacks listener
+        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks) {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                isAppInBackground = false
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+                isAppInBackground = true
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+                isAppInBackground = false
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+                isAppInBackground = true 
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+                isAppInBackground = true
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+                // Activity save instance state
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                // Activity destroyed
+            }
+        })
+    }
+
+
+
     override var callbackContext: CallbackContext? = null
     private var tokenRefreshCallbackContext: CallbackContext? = null
     private lateinit var notificationManager : FirebaseNotificationManagerInterface
@@ -31,7 +77,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-    var isAppInForeground = true
+    var isAppInBackground = false
 
     companion object {
         private const val CHANNEL_NAME_KEY = "notification_channel_name"
@@ -52,6 +98,10 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         val intent = getActivity().intent
         handleIntent(intent)
+    }
+
+    fun isInBackground(): Boolean {
+        return isAppInBackground
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -189,7 +239,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     override fun sendToken(token: String?) {
         Log.d("OSFCM", "sendToken called")
         if (tokenRefreshCallbackContext == null) {
-            Log.d(TAG, "sendToken tokenRefreshCallbackContext null")
+            Log.d("OSFCM", "sendToken tokenRefreshCallbackContext null")
             return
         }
     
@@ -198,7 +248,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             val pluginResult = PluginResult(PluginResult.Status.OK, token)
             pluginResult.keepCallback = true
             callbackContext.sendPluginResult(pluginResult)
-            Log.d(TAG, "sendToken success. token: $token")
+            Log.d("OSFCM", "sendToken success. token: $token")
         }
     }
     

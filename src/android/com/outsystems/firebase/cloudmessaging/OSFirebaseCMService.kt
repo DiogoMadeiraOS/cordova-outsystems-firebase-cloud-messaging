@@ -47,7 +47,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     }
     
     override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
+        Log.d("OSFCM", "Refreshed token: $token")
         osFCM.sendToken(token)
     }
         
@@ -121,7 +121,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
-            if (AppForegroundStateManager.isAppInForeground()) { 
+            if (osFCM.isInBackground()) { 
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
                     Log.d("OSFCM", "Data Message received from CMT")
@@ -144,7 +144,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty()) {
             val showNotification =
-                (AppForegroundStateManager.isAppInForeground()/* || !OSFirebaseCloudMessaging.hasNotificationsCallback() */) && (!TextUtils.isEmpty(
+                (osFCM.isInBackground()/* || !OSFirebaseCloudMessaging.hasNotificationsCallback() */) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
             Log.d("OSFCM", "showNotification: " + if (showNotification) "true" else "false")
@@ -219,12 +219,12 @@ class OSFirebaseCMService : FirebaseMessagingService() {
             }
     
             if (sound != null) {
-                Log.d(TAG, "sound before path is: $sound")
+                Log.d("OSFCM", "sound before path is: $sound")
                 val soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://$packageName/raw/$sound")
-                Log.d(TAG, "Parsed sound is: $soundPath")
+                Log.d("OSFCM", "Parsed sound is: $soundPath")
                 notificationBuilder.setSound(soundPath)
             } else {
-                Log.d(TAG, "Sound was null")
+                Log.d("OSFCM", "Sound was null")
             }
     
             var lightArgb = 0
@@ -243,7 +243,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 val accentID = resources.getIdentifier("accent", "color", packageName)
-                Log.d(TAG, "AccentId: ${Integer.toString(accentID)}")
+                Log.d("OSFCM", "AccentId: ${Integer.toString(accentID)}")
                 notificationBuilder.setColor(resources.getColor(accentID, null))
             }
     
@@ -273,7 +273,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
                     channel.enableVibration(true)
                     channel.setShowBadge(true)
                     if (lights != null) {
-                        Log.d(TAG, "lightArgb: ${Integer.toString(lightArgb)}")
+                        Log.d("OSFCM", "lightArgb: ${Integer.toString(lightArgb)}")
                         channel.lightColor = lightArgb
                     }
                     if (sound != null) {
@@ -334,12 +334,12 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     private fun getCurrentBadgeNumber(context: Context): Int {
         val settings = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
         val currentBadgeNumber = settings.getInt(KEY, 0)
-        Log.d(TAG, "Current badge count: $currentBadgeNumber")
+        Log.d("OSFCM", "Current badge count: $currentBadgeNumber")
         return currentBadgeNumber
     }
     
     private fun applyBadgeCount(context: Context, count: Int) {
-        Log.d(TAG, "Applying badge count: $count")
+        Log.d("OSFCM", "Applying badge count: $count")
         ShortcutBadger.applyCount(context, count)
         val editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit()
         editor.putInt(KEY, count)
