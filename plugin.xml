@@ -80,17 +80,23 @@
 
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+      <uses-permission android:name="android.permission.WAKE_LOCK" />
     </config-file>
-
-    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"> 
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+    <service android:name="com.outsystems.firebase.cloudmessaging.FirebaseApplication"> 
       <intent-filter> 
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
     </service>
-
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="CHANNEL_SERVICE"/>
+    </config-file>
     <config-file parent="/resources" target="res/values/strings.xml">
-      <string name="default_notification_channel_name">default_notification_channel_name</string>
-      <string name="default_notification_channel_description">default_notification_channel_description</string>
+      <string name="default_notification_channel_name">Services</string>
+      <string name="default_notification_channel_description">Services</string>
     </config-file>
 
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
