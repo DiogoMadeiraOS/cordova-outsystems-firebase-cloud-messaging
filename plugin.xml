@@ -87,8 +87,8 @@
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
     </service>
-    <receiver android:name="org.apache.cordova.firebase.OnNotificationOpenReceiver"></receiver>
-    <activity android:name="org.apache.cordova.firebase.OnNotificationOpenActivity" />
+    <receiver android:name="com.outsystems.firebase.cloudmessaging.OnNotificationOpenReceiver"></receiver>
+    <activity android:name="com.outsystems.firebase.cloudmessaging.OnNotificationOpenActivity" />
   </config-file>
     <config-file parent="/resources" target="res/values/strings.xml">
       <string name="default_notification_channel_name">default_notification_channel_name</string>
