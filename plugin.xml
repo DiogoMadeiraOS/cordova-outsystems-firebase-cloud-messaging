@@ -69,8 +69,8 @@
    
 
     <config-file parent="/*" target="res/xml/config.xml">
-      <feature name="FirebaseApplication">
-        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.FirebaseApplication"/>
+      <feature name="OSFirebaseCloudMessaging">
+        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"/>
 	      <param name="onload" value="true" />
       </feature>
       <preference name="GradlePluginKotlinEnabled" value="true" />
@@ -85,13 +85,11 @@
       <uses-permission android:name="android.permission.WAKE_LOCK" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-    <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging" android:stopWithTask="false" android:exported="false"> 
+    <service android:name="com.outsystems.firebase.cloudmessaging.FirebaseApplication"> 
       <intent-filter> 
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
     </service>
-    <receiver android:name="com.outsystems.firebase.cloudmessaging.OnNotificationOpenReceiver"></receiver>
-    <activity android:name="com.outsystems.firebase.cloudmessaging.OnNotificationOpenActivity" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="CHANNEL_SERVICE"/>
