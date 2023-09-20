@@ -34,7 +34,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val application = applicationContext as Application
 
         // Register an ActivityLifecycleCallbacks listener
-        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks) {
+        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 isAppInBackground = false
             }
@@ -62,7 +62,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             override fun onActivityDestroyed(activity: Activity) {
                 // Activity destroyed
             }
-        }
+        })
     }
 
 
