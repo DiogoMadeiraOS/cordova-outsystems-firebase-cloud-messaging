@@ -133,7 +133,10 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
         
     fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
         Log.d("OSFCM","OSFCM - onMessageReceived started")
+        Log.d("OSFCM", "Message received from: ${remoteMessage.from}")
+        Log.d("OSFCM", "Notification message: ${remoteMessage.notification?.body}")
 
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
