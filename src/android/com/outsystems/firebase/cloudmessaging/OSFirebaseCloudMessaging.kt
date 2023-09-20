@@ -278,9 +278,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun setupChannelNameAndDescription(){
-        val channelName = getActivity().getString(getStringResourceId("notification_channel_name"))
-        val channelDescription = getActivity().getString(getStringResourceId("notification_channel_description"))
-
+        val channelName = "Services"
+        val channelDescription = "Services"
         if(!channelName.isNullOrEmpty()){
             val editorName = getActivity().getSharedPreferences(CHANNEL_NAME_KEY, Context.MODE_PRIVATE).edit()
             editorName.putString(CHANNEL_NAME_KEY, channelName)
