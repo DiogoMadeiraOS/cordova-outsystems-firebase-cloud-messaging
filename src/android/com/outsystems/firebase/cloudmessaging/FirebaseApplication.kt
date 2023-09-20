@@ -5,7 +5,7 @@ import android.util.Log
 
 class FirebaseApplication : Application() {
 
-    private var foregroundCount = 0
+
 
     override fun onCreate() {
         super.onCreate()
