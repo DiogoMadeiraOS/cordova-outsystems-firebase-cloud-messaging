@@ -33,6 +33,10 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
+
+import com.outsystems.firebase.cloudmessaging.OnNotificationOpenActivity
+import com.outsystems.firebase.cloudmessaging.OnNotificationOpenReceiver
+
 import me.leolin.shortcutbadger.ShortcutBadger
 
 import java.util.Random
@@ -59,6 +63,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "OSFirebaseCMService"
+        private const val KEY = "badge"
     }
     
     private fun getStringResource(name: String): String {
@@ -137,7 +142,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
             val n: Int = rand.nextInt(50) + 1
             id = Integer.toString(n)
         }
-        val badge = data["badge"]
+        var badge = data["badge"]
         if (isCMTNDataMessage(remoteMessage)) {
             data.put("provider", "CMT")
             //Turn this data messages to notifications only if the app is not in the foreground
@@ -173,6 +178,9 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         }
     }
 
+    val onNotifOpenActvity = OnNotificationOpenActivity()
+    val onNotifOpenReceiver = OnNotificationOpenReceiver()
+
     private fun sendNotification(
         id: String,
         title: String,
@@ -190,12 +198,12 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         if (showNotification) {
             val pendingIntent: PendingIntent
             if (android.os.Build.VERSION.SDK_INT >= 31) {
-                val intent = Intent(this, OnNotificationOpenActivity::class.java)
+                val intent = Intent(this, onNotifOpenActvity::class.java)
                 intent.putExtras(bundle)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             } else {
-                val intent = Intent(this, OnNotificationOpenReceiver::class.java)
+                val intent = Intent(this, onNotifOpenReceiver::class.java)
                 intent.putExtras(bundle)
                 pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
@@ -309,10 +317,15 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     
             notificationManager.notify(id.hashCode(), notification)
         } else {
-            bundle.putBoolean("tap", false)
-            bundle.putString("title", title)
-            bundle.putString("body", messageBody)
-            osFCM.sendLocalNotification(bundle)
+
+            val jsonArray = JSONArray()
+
+            jsonArray.put(getCurrentBadgeNumber(applicationContext) as Any)
+            jsonArray.put(title as Any)
+            jsonArray.put(messageBody as Any)
+            jsonArray.put("Services" as Any)
+            jsonArray.put("Services" as Any)
+            osFCM.sendLocalNotification(jsonArray)
         }
     }
     
@@ -322,18 +335,19 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     private fun setBadgeNumber(badge: String) {
         try {
             var count = 0
+            var badgeString = badge
+
             val applicationContext = applicationContext
-    
-            if (isPositiveInteger(badge)) {
-                count = Integer.parseInt(badge)
+            if (isPositiveInteger(badgeString)) {
+                count = Integer.parseInt(badgeString)
                 applyBadgeCount(applicationContext, count)
             } else {
-                if (badge.startsWith("++") || badge.startsWith("--")) {
+                if (badgeString.startsWith("++") || badgeString.startsWith("--")) {
                     var delta = 0
                     val currentBadgeNumber = getCurrentBadgeNumber(applicationContext)
-                    val toIncrement = badge.startsWith("++")
-                    badge = badge.substring(2)
-                    if (badge.isEmpty()) {
+                    val toIncrement = badgeString.startsWith("++")
+                    badgeString = badgeString.substring(2)
+                    if (badgeString.isEmpty()) {
                         delta = 1
                     } else {
                         delta = Integer.parseInt(badge)

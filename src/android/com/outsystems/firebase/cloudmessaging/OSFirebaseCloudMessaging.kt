@@ -232,7 +232,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         controller.getBadgeNumber()
     }
 
-    override fun sendToken(token: String?) {
+    fun sendToken(token: String?) {
         Log.d("OSFCM", "sendToken called")
         if (tokenRefreshCallbackContext == null) {
             Log.d("OSFCM", "sendToken tokenRefreshCallbackContext null")

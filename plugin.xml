@@ -81,13 +81,15 @@
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     </config-file>
-
+  <config-file>
     <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCMService"> 
       <intent-filter> 
         <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
       </intent-filter> 
     </service>
-
+    <receiver android:name="org.apache.cordova.firebase.OnNotificationOpenReceiver"></receiver>
+    <activity android:name="org.apache.cordova.firebase.OnNotificationOpenActivity" />
+  </config-file>
     <config-file parent="/resources" target="res/values/strings.xml">
       <string name="default_notification_channel_name">default_notification_channel_name</string>
       <string name="default_notification_channel_description">default_notification_channel_description</string>
@@ -97,6 +99,10 @@
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessageReceiver.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessageReceiverManager.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OnNotificationOpenActivity.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OnNotificationOpenReceiver.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
+    
+    
     <framework src="src/android/com/outsystems/firebase/cloudmessaging/build.gradle" custom="true" type="gradleReference" />
 
   </platform>
