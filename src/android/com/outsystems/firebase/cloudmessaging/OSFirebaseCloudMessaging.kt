@@ -81,11 +81,15 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     override fun onNewIntent(intent: Intent) {
+        Log.d("OSFCM","OSFCM - onNewIntent started with $intent")
+
         super.onNewIntent(intent)
         handleIntent(intent)
     }
 
     private fun handleIntent(intent: Intent) {
+        Log.d("OSFCM","OSFCM - handleIntent started with $intent")
+
         val extras = intent.extras
         val extrasSize = extras?.size() ?: 0
         if(extrasSize > 0) {
@@ -104,6 +108,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             sendPluginResult(result)
         }
         override fun callbackNotifyApp(event: String, result: String) {
+            Log.d("OSFCM","OSFCM - callbackNotifyApp started with $event , $result ")
+
             val js = "cordova.plugins.OSFirebaseCloudMessaging.fireEvent(" +
                     "\"" + event + "\"," + result + ");"
             if(deviceReady) {
@@ -115,17 +121,20 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
         override fun callbackSuccess() {
             sendPluginResult(true)
+            Log.d("OSFCM","OSFCM - callbackSuccess started")
+
         }
         override fun callbackBadgeNumber(number: Int) {
             //Does nothing on android
         }
         override fun callbackError(error: FirebaseMessagingError) {
             sendPluginResult(null, Pair(formatErrorCode(error.code), error.description))
+            Log.d("OSFCM","OSFCM - Error $error.code - $error.description")
         }
     }
 
     private fun ready() {
-        Log.d(TAG,"OSFCM - ready started")
+        Log.d("OSFCM","OSFCM - ready started")
         deviceReady = true
         eventQueue.forEach { event ->
             triggerEvent(event)
@@ -214,6 +223,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private suspend fun registerWithPermission() {
+        Log.d("OSFCM","OSFCM - registerWithPermission started")
+
         val hasPermission = notificationPermission.hasNotificationPermission(this)
         if(Build.VERSION.SDK_INT < 33 || hasPermission) {
             controller.registerDevice()
@@ -226,7 +237,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     @Override
     fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d(TAG,"OSFCM - onMessageReceived started")
+        Log.d("OSFCM","OSFCM - onMessageReceived started")
 
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
@@ -237,13 +248,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
-        Log.d(TAG, "FirebasePluginMessagingService onMessageReceived called")
+        Log.d("OSFCM", "FirebasePluginMessagingService onMessageReceived called")
 
         // Pass the message to the receiver manager so any registered receivers can decide to handle it
         val wasHandled: Boolean =
             receiverManager.onMessageReceived(remoteMessage)
         if (wasHandled) {
-            Log.d(TAG, "Message was handled by a registered receiver")
+            Log.d("OSFCM", "Message was handled by a registered receiver")
 
             // Don't process the message in this method.
             return
@@ -295,19 +306,19 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             if (AppForegroundStateManager.isAppInForeground()) { 
                 val messageContents: HashMap<String, String>? = handleCMTDataMessage(remoteMessage)
                 if (messageContents != null) {
-                    Log.d(TAG, "Data Message received from CMT")
+                    Log.d("OSFCM", "Data Message received from CMT")
                     title = "YAY"//messageContents.get("title").toString()
                     text = "Finally working :)"//messageContents.get("text").toString()
                 }
             }
         }
-        Log.d(TAG, "From: " + remoteMessage.getFrom())
-        Log.d(TAG, "Notification Message id: $id")
-        Log.d(TAG, "Notification Message Title: $title")
-        Log.d(TAG, "Notification Message Body/Text: $text")
-        Log.d(TAG, "Notification Message Sound: $sound")
-        Log.d(TAG, "Notification Message Lights: $lights")
-        Log.d(TAG, "Notification Badge: $badge")
+        Log.d("OSFCM", "From: " + remoteMessage.getFrom())
+        Log.d("OSFCM", "Notification Message id: $id")
+        Log.d("OSFCM", "Notification Message Title: $title")
+        Log.d("OSFCM", "Notification Message Body/Text: $text")
+        Log.d("OSFCM", "Notification Message Sound: $sound")
+        Log.d("OSFCM", "Notification Message Lights: $lights")
+        Log.d("OSFCM", "Notification Badge: $badge")
         if (badge != null && !badge.isEmpty()) {
             setBadgeNumber() //setBadgeNumber(badge)
         }
@@ -318,7 +329,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 (AppForegroundStateManager.isAppInForeground()/* || !OSFirebaseCloudMessaging.hasNotificationsCallback() */) && (!TextUtils.isEmpty(
                     text
                 ) || !TextUtils.isEmpty(title))
-            Log.d(TAG, "showNotification: " + if (showNotification) "true" else "false")
+            Log.d("OSFCM", "showNotification: " + if (showNotification) "true" else "false")
 
             val jsonArray = JSONArray()
 
@@ -331,7 +342,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun sendLocalNotification(args : JSONArray) {
-        Log.d(TAG,"OSFCM - sendLocalNotification started")
+        Log.d("OSFCM","OSFCM - sendLocalNotification started")
 
         val badge = args.get(0).toString().toInt()
         val title = args.get(1).toString()
@@ -368,6 +379,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun formatErrorCode(code: Int): String {
+        Log.d("OSFCM","OSFCM - Error Code: $code formatErrorCode")
+
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
 
@@ -377,13 +390,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     
     private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
-        Log.d(TAG,"OSFCM - handleCMTDataMessage started")
+        Log.d("OSFCM","OSFCM - handleCMTDataMessage started")
 
     val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
     if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
         val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]
         if (text != null && text.isEmpty()) {
-            Log.d(TAG, "Expected CMT Data Message properties are empty")
+            Log.d("OSFCM", "Expected CMT Data Message properties are empty")
             return null
         }
         var title: String? = null
@@ -395,7 +408,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         properties.put("title",title.toString())
         return properties
     } else {
-        Log.d(TAG, "Unsupported CMT Data Message Trigger Type: $triggerType")
+        Log.d("OSFCM", "Unsupported CMT Data Message Trigger Type: $triggerType")
         return null
     }
 }
