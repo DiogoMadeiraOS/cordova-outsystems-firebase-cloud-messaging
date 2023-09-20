@@ -131,110 +131,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             sendPluginResult(null, Pair(formatErrorCode(error.code), error.description))
             Log.d("OSFCM","OSFCM - Error $error.code - $error.description")
         }
-    }
-
-    private fun ready() {
-        Log.d("OSFCM","OSFCM - ready started")
-        deviceReady = true
-        eventQueue.forEach { event ->
-            triggerEvent(event)
-        }
-        eventQueue.clear()
-
-        if(Build.VERSION.SDK_INT >= 33 &&
-            !notificationPermission.hasNotificationPermission(this)) {
-
-            notificationPermission.requestNotificationPermission(
-                this,
-                NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE)
-        }
-
-    }
-
-    override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
-        this.callbackContext = callbackContext
-        val result = runBlocking {
-            when (action) {
-                "ready" -> {
-                    ready()
-                }
-                "getToken" -> {
-                    controller.getToken()
-                }
-                "subscribe" -> {
-                    args.getString(0)?.let { topic ->
-                        controller.subscribe(topic)
-                    }
-                }
-                "unsubscribe" -> {
-                    args.getString(0)?.let { topic ->
-                        controller.unsubscribe(topic)
-                    }
-                }
-                "registerDevice" -> {
-                    registerWithPermission()
-                }
-                "unregisterDevice" -> {
-                    controller.unregisterDevice()
-                }
-                "clearNotifications" -> {
-                    clearNotifications()
-                }
-                "sendLocalNotification" -> {
-                    sendLocalNotification(args)
-                }
-                "setBadge" -> {
-                    setBadgeNumber()
-                }
-                "getBadge" -> {
-                    getBadgeNumber()
-                }
-                "getPendingNotifications" -> {
-                    args.getBoolean(0).let { clearFromDatabase ->
-                        controller.getPendingNotifications(clearFromDatabase)
-                    }
-                }
-                else -> false
-            }
-            true
-        }
-        return result
-    }
-
-    override fun onRequestPermissionResult(requestCode: Int,
-                                           permissions: Array<String>,
-                                           grantResults: IntArray) {
-        when(requestCode) {
-            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
-                CoroutineScope(IO).launch {
-                    controller.registerDevice()
-                }
-            }
-        }
-    }
-
-    override fun areGooglePlayServicesAvailable(): Boolean {
-        // Not used in this project.
-        return false
-    }
-
-    private fun getBadgeNumber() {
-        controller.getBadgeNumber()
-    }
-
-    private suspend fun registerWithPermission() {
-        Log.d("OSFCM","OSFCM - registerWithPermission started")
-
-        val hasPermission = notificationPermission.hasNotificationPermission(this)
-        if(Build.VERSION.SDK_INT < 33 || hasPermission) {
-            controller.registerDevice()
-        }
-        else {
-            notificationPermission
-                .requestNotificationPermission(this, NOTIFICATION_PERMISSION_REQUEST_CODE)
-        }
-    }
-
+        
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("OSFCM","OSFCM - onMessageReceived started")
 
@@ -340,6 +237,141 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
+    private fun isCMTNDataMessage(remoteMessage: RemoteMessage): Boolean {
+        return remoteMessage.data.containsKey(CMT_DATA_MESSAGE_TYPE_KEY)
+        }
+    
+        
+        private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
+            Log.d("OSFCM","OSFCM - handleCMTDataMessage started")
+    
+        val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
+        if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
+            val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]
+            if (text != null && text.isEmpty()) {
+                Log.d("OSFCM", "Expected CMT Data Message properties are empty")
+                return null
+            }
+            var title: String? = null
+            if (RESULTS_CMT_DATA_MESSAGE_TYPE == triggerType) {
+                title = "New trip"  // getStringResource("new_trip_results_notification_title")
+            }
+            val properties: HashMap<String, String> = HashMap<String, String>()
+            properties.put("text", text.toString())
+            properties.put("title",title.toString())
+            return properties
+        } else {
+            Log.d("OSFCM", "Unsupported CMT Data Message Trigger Type: $triggerType")
+            return null
+        }
+    }
+
+    }
+
+    private fun ready() {
+        Log.d("OSFCM","OSFCM - ready started")
+        deviceReady = true
+        eventQueue.forEach { event ->
+            triggerEvent(event)
+        }
+        eventQueue.clear()
+
+        if(Build.VERSION.SDK_INT >= 33 &&
+            !notificationPermission.hasNotificationPermission(this)) {
+
+            notificationPermission.requestNotificationPermission(
+                this,
+                NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE)
+        }
+
+    }
+
+    override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
+        this.callbackContext = callbackContext
+        val result = runBlocking {
+            when (action) {
+                "ready" -> {
+                    ready()
+                }
+                "getToken" -> {
+                    controller.getToken()
+                }
+                "subscribe" -> {
+                    args.getString(0)?.let { topic ->
+                        controller.subscribe(topic)
+                    }
+                }
+                "unsubscribe" -> {
+                    args.getString(0)?.let { topic ->
+                        controller.unsubscribe(topic)
+                    }
+                }
+                "registerDevice" -> {
+                    registerWithPermission()
+                }
+                "unregisterDevice" -> {
+                    controller.unregisterDevice()
+                }
+                "clearNotifications" -> {
+                    clearNotifications()
+                }
+                "sendLocalNotification" -> {
+                    sendLocalNotification(args)
+                }
+                "setBadge" -> {
+                    setBadgeNumber()
+                }
+                "getBadge" -> {
+                    getBadgeNumber()
+                }
+                "getPendingNotifications" -> {
+                    args.getBoolean(0).let { clearFromDatabase ->
+                        controller.getPendingNotifications(clearFromDatabase)
+                    }
+                }
+                else -> false
+            }
+            true
+        }
+        return result
+    }
+
+    override fun onRequestPermissionResult(requestCode: Int,
+                                           permissions: Array<String>,
+                                           grantResults: IntArray) {
+        when(requestCode) {
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                CoroutineScope(IO).launch {
+                    controller.registerDevice()
+                }
+            }
+        }
+    }
+
+    override fun areGooglePlayServicesAvailable(): Boolean {
+        // Not used in this project.
+        return false
+    }
+
+    private fun getBadgeNumber() {
+        controller.getBadgeNumber()
+    }
+
+    private suspend fun registerWithPermission() {
+        Log.d("OSFCM","OSFCM - registerWithPermission started")
+
+        val hasPermission = notificationPermission.hasNotificationPermission(this)
+        if(Build.VERSION.SDK_INT < 33 || hasPermission) {
+            controller.registerDevice()
+        }
+        else {
+            notificationPermission
+                .requestNotificationPermission(this, NOTIFICATION_PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    
+
     private fun sendLocalNotification(args : JSONArray) {
         Log.d("OSFCM","OSFCM - sendLocalNotification started")
 
@@ -383,32 +415,5 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
 
-    private fun isCMTNDataMessage(remoteMessage: RemoteMessage): Boolean {
-    return remoteMessage.data.containsKey(CMT_DATA_MESSAGE_TYPE_KEY)
-    }
-
     
-    private fun handleCMTDataMessage(remoteMessage: RemoteMessage): HashMap<String, String>? {
-        Log.d("OSFCM","OSFCM - handleCMTDataMessage started")
-
-    val triggerType = remoteMessage.data[CMT_DATA_MESSAGE_TYPE_KEY]
-    if (CMT_SUPPORTED_DATA_MESSAGE_TYPES.contains(triggerType)) {
-        val text = remoteMessage.data[CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY]
-        if (text != null && text.isEmpty()) {
-            Log.d("OSFCM", "Expected CMT Data Message properties are empty")
-            return null
-        }
-        var title: String? = null
-        if (RESULTS_CMT_DATA_MESSAGE_TYPE == triggerType) {
-            title = "New trip"  // getStringResource("new_trip_results_notification_title")
-        }
-        val properties: HashMap<String, String> = HashMap<String, String>()
-        properties.put("text", text.toString())
-        properties.put("title",title.toString())
-        return properties
-    } else {
-        Log.d("OSFCM", "Unsupported CMT Data Message Trigger Type: $triggerType")
-        return null
-    }
-}
 }
