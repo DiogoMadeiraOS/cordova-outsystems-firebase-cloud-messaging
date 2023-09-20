@@ -62,7 +62,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             override fun onActivityDestroyed(activity: Activity) {
                 // Activity destroyed
             }
-        })
+        }
     }
 
 
