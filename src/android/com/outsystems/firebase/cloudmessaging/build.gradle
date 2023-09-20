@@ -42,6 +42,7 @@ dependencies {
     annotationProcessor("android.arch.persistence.room:compiler:1.1.1")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 }
 // use postBuildExtras to make sure the plugin is applied after
 // cdvPluginPostBuildExtras. Therefore if googleServices is added

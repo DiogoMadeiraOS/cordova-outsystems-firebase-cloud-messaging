@@ -69,8 +69,8 @@
    
 
     <config-file parent="/*" target="res/xml/config.xml">
-      <feature name="OSFirebaseCMService">
-        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.OSFirebaseCMService"/>
+      <feature name="OSFirebaseCloudMessaging">
+        <param name="android-package" value="com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessaging"/>
 	      <param name="onload" value="true" />
       </feature>
       <preference name="GradlePluginKotlinEnabled" value="true" />
