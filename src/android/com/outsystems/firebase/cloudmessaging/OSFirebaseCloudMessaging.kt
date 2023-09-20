@@ -341,7 +341,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
-    fun sendLocalNotification(args : JSONArray) {
+    private fun sendLocalNotification(args : JSONArray) {
         Log.d("OSFCM","OSFCM - sendLocalNotification started")
 
         val badge = args.get(0).toString().toInt()
