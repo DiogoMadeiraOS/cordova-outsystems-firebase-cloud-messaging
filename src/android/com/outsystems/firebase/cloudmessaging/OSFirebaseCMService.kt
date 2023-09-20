@@ -1,23 +1,38 @@
 package com.outsystems.firebase.cloudmessaging;
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.res.Resources
 import android.content.Context
+import android.content.ContentResolver
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.text.TextUtils
+import android.content.SharedPreferences
+import android.graphics.BitmapFactory
+import android.media.RingtoneManager
+import android.net.Uri
+import android.graphics.Color
+import android.media.AudioAttributes
+
+import androidx.core.app.NotificationCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.PermissionResult
+
 import com.outsystems.osnotificationpermissions.OSNotificationPermissions
 import com.outsystems.plugins.firebasemessaging.controller.*
 import com.outsystems.plugins.firebasemessaging.model.FirebaseMessagingError
 import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManager
 import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManagerInterface
 import com.outsystems.plugins.oscordova.CordovaImplementation
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
-import com.outsystems.firebase.cloudmessaging.AppForegroundStateManager
 import me.leolin.shortcutbadger.ShortcutBadger
 
 import java.util.Random
@@ -44,6 +59,11 @@ class OSFirebaseCMService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "OSFirebaseCMService"
+    }
+    
+    private fun getStringResource(name: String): String {
+        val resourceId = resources.getIdentifier(name, "string", packageName)
+        return getString(resourceId)
     }
     
     override fun onNewToken(token: String) {
@@ -138,7 +158,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         Log.d("OSFCM", "Notification Message Lights: $lights")
         Log.d("OSFCM", "Notification Badge: $badge")
         if (badge != null && !badge.isEmpty()) {
-            setBadgeNumber() //setBadgeNumber(badge)
+            setBadgeNumber(badge) //setBadgeNumber(badge)
         }
 
         // TODO: Add option to developer to configure if show notification when app on foreground

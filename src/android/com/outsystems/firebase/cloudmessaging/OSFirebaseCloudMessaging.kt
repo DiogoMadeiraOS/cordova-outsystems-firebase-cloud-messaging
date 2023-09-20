@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
+
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.PermissionResult
 import com.outsystems.osnotificationpermissions.OSNotificationPermissions
@@ -20,6 +22,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray
 
 
