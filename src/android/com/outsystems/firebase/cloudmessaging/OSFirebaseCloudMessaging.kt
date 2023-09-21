@@ -72,22 +72,6 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         val intent = getActivity().intent
         handleIntent(intent)*/
-      
-        val extras = cordova.activity.intent.extras
-        cordova.threadPool.execute {
-            Log.d("OSFCM", "Starting Firebase plugin")
-            if (extras != null && extras.size() > 1) {
-                if (notificationStack == null) {
-                    notificationStack = ArrayList()
-                }
-                if (extras.containsKey("google.message_id")) {
-                    extras.putBoolean("tap", true)
-                    notificationStack.add(extras)
-                }
-            }
-        }
-
-
     }
 
     fun isInBackground(): Boolean {
