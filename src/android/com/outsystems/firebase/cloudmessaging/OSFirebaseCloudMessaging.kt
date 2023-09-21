@@ -65,7 +65,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         notificationManager = FirebaseNotificationManager(getActivity(), databaseManager)
         messagingManager = FirebaseMessagingManager()
         controller = FirebaseMessagingController(controllerDelegate, messagingManager, notificationManager)
-        service = OSFirebaseCMService()
+      
 
 
         setupChannelNameAndDescription()
@@ -75,7 +75,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
       
         val extras = cordova.activity.intent.extras
         cordova.threadPool.execute {
-            Log.d(TAG, "Starting Firebase plugin")
+            Log.d("OSFCM", "Starting Firebase plugin")
             if (extras != null && extras.size() > 1) {
                 if (notificationStack == null) {
                     notificationStack = ArrayList()
@@ -165,21 +165,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }*/
 
     }
-    override fun onNewIntent(intent: Intent) {
-    super.onNewIntent(intent)
-    val data = intent.extras
 
-    if (data != null && data.containsKey("google.message_id")) {
-         val jsonArray = JSONArray()
-
-            jsonArray.put(getCurrentBadgeNumber(applicationContext) as Any)
-            jsonArray.put(title as Any)
-            jsonArray.put(messageBody as Any)
-            jsonArray.put("OnNewIntent test" as Any)
-            jsonArray.put("Okuvisir" as Any)
-        sendLocalNotification(jsonArray)
-    }
-}
 
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
