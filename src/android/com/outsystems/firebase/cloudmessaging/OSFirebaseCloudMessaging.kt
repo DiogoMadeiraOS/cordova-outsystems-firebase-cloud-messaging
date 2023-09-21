@@ -97,6 +97,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             sendPluginResult(result)
         }
         override fun callbackNotifyApp(event: String, result: String) {
+            Log.d("OSFCM","OSFCM - FCM callbackNotifyApp")
             val js = "cordova.plugins.OSFirebaseCloudMessaging.fireEvent(" +
                     "\"" + event + "\"," + result + ");"
             if(deviceReady) {
