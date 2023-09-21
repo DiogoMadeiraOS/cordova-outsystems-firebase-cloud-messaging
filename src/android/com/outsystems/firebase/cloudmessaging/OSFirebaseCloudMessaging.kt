@@ -28,7 +28,7 @@ import org.json.JSONArray
 import kotlin.booleanArrayOf
 
 
-class OSFirebaseCloudMessaging : CordovaPlugin() {
+class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     override var callbackContext: CallbackContext? = null
     private var tokenRefreshCallbackContext: CallbackContext? = null
@@ -64,16 +64,6 @@ class OSFirebaseCloudMessaging : CordovaPlugin() {
         val intent = getActivity().intent
         handleIntent(intent)
     }
-    override fun onResume(multitasking: Boolean) {
-        super.onResume(multitasking)
-        isAppInBackground = false
-    }
-
-    override fun onPause(multitasking: Boolean) {
-        super.onResume(multitasking)
-        isAppInBackground = true
-    }
-
 
     fun isInBackground(): Boolean {
         return isAppInBackground
