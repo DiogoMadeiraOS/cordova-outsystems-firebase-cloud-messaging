@@ -70,6 +70,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     override fun onNewIntent(intent: Intent) {
+        Log.d("OSFCM","OSFCM - FCM onNewIntent started with $intent")
         super.onNewIntent(intent)
         handleIntent(intent)
     }
@@ -92,6 +93,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     private val controllerDelegate = object: FirebaseMessagingInterface {
         override fun callback(result: String) {
+            Log.d("OSFCM","OSFCM - FCM callback started with $result")
             sendPluginResult(result)
         }
         override fun callbackNotifyApp(event: String, result: String) {
@@ -101,10 +103,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 triggerEvent(js)
             }
             else {
+                Log.d("OSFCM","OSFCM - FCM event added to queue")
                 eventQueue.add(js)
             }
         }
         override fun callbackSuccess() {
+            Log.d("OSFCM","OSFCM - FCM callbackSuccess started")
             sendPluginResult(true)
         }
         override fun callbackBadgeNumber(number: Int) {
@@ -126,13 +130,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
         eventQueue.clear()
 
-        if(Build.VERSION.SDK_INT >= 33 &&
+        /*if(Build.VERSION.SDK_INT >= 33 &&
             !notificationPermission.hasNotificationPermission(this)) {
 
             notificationPermission.requestNotificationPermission(
                 this,
                 NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE)
-        }
+        }*/
 
     }
 
