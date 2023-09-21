@@ -41,7 +41,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private lateinit var messagingManager : FirebaseMessagingManagerInterface
     private lateinit var controller : FirebaseMessagingController
     private lateinit var databaseManager: DatabaseManagerInterface
-    private val service : OSFirebaseCMService()
+    private val service = OSFirebaseCMService()
 
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
@@ -86,7 +86,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 }
             }
         }
-}
+
 
     }
 
