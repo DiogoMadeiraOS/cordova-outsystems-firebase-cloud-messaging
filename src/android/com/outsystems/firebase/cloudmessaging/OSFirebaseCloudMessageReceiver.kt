@@ -5,6 +5,8 @@ import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverMana
 
 abstract class OSFirebaseCloudMessageReceiver {
     init {
+        Log.d("OSFCM","OSFCM - FCM init Receiver started")
+
         var receiverManager = OSFirebaseCloudMessageReceiverManager()
         receiverManager.register(this)
     }

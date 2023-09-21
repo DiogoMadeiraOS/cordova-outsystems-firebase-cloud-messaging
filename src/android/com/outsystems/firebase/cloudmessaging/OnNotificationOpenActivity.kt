@@ -17,20 +17,22 @@ class OnNotificationOpenActivity : Activity() {
     private val osFCM = OSFirebaseCloudMessaging()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "OnNotificationOpenActivity onCreate called")
+        Log.d("OSFCM", "OSFCM - OnNotificationOpenActivity onCreate called")
         super.onCreate(savedInstanceState)
         processNotification()
         finish()
     }
 
     override fun onNewIntent(intent: Intent) {
-        Log.d(TAG, "OnNotificationOpenActivity onNewIntent called")
+        Log.d("OSFCM", "OSFCM - OnNotificationOpenActivity onNewIntent called with $intent")
         super.onNewIntent(intent)
         processNotification()
         finish()
     }
 
     private fun processNotification() {
+        Log.d("OSFCM","OSFCM - FCM processNotification started")
+
         val context: Context = applicationContext
         val pm: PackageManager = context.packageManager
         val launchIntent = pm.getLaunchIntentForPackage(context.packageName)

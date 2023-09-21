@@ -17,12 +17,14 @@ import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiver
         ArrayList<OSFirebaseCloudMessageReceiver>()
 
     fun register(receiver: OSFirebaseCloudMessageReceiver) {
+        Log.d("OSFCM","OSFCM - FCM register ReceiverManager started")
+
         Log.d("OSFCM", "FirebasePluginMessageReceiverManager register called")
         receivers.add(receiver)
     }
     
       fun onMessageReceived(remoteMessage: RemoteMessage?): Boolean {
-          Log.d("OSFCM", "FirebasePluginMessageReceiverManager onMessageReceived called")
+          Log.d("OSFCM", "OSFCM FirebasePluginMessageReceiverManager onMessageReceived called")
           Log.d("OSFCM","OSFCM - ready started")
 
           var handled = false

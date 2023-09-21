@@ -17,7 +17,7 @@ class OnNotificationOpenReceiver : BroadcastReceiver() {
     private val osFCM = OSFirebaseCloudMessaging()
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d(TAG, "OnNotificationOpenReceiver onReceive called")
+        Log.d("OSFCM", "OSFCM - OnNotificationOpenReceiver onReceive called")
         val pm = context.packageManager
 
         val launchIntent = pm.getLaunchIntentForPackage(context.packageName)

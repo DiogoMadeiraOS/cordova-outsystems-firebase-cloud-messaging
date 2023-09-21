@@ -84,6 +84,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
+        Log.d("OSFCM","OSFCM - FCM initialize started")
+
         super.initialize(cordova, webView)
         databaseManager = DatabaseManager.getInstance(getActivity())
         notificationManager = FirebaseNotificationManager(getActivity(), databaseManager)
@@ -106,6 +108,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun handleIntent(intent: Intent) {
+        Log.d("OSFCM","OSFCM - FCM intent started with $intent")
+
         val extras = intent.extras
         val extrasSize = extras?.size() ?: 0
         if(extrasSize > 0) {
@@ -140,11 +144,15 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             //Does nothing on android
         }
         override fun callbackError(error: FirebaseMessagingError) {
+            Log.d("OSFCM","OSFCM - FCM callbackerror $error")
+
             sendPluginResult(null, Pair(formatErrorCode(error.code), error.description))
         }
     }
 
     private fun ready() {
+        Log.d("OSFCM","OSFCM - FCM ready started")
+
         deviceReady = true
         eventQueue.forEach { event ->
             triggerEvent(event)
@@ -233,7 +241,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     fun sendToken(token: String?) {
-        Log.d("OSFCM", "sendToken called")
+        Log.d("OSFCM", "OSFCM sendToken called")
         if (tokenRefreshCallbackContext == null) {
             Log.d("OSFCM", "sendToken tokenRefreshCallbackContext null")
             return
@@ -261,6 +269,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     fun sendLocalNotification(args : JSONArray) {
+        Log.d("OSFCM","OSFCM - FCM sendlocalNotification started")
+
         val badge = args.get(0).toString().toInt()
         val title = args.get(1).toString()
         val text = args.get(2).toString()

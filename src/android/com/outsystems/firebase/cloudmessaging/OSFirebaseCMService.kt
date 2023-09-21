@@ -190,6 +190,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
         sound: String?,
         lights: String?
     ) {
+        Log.d("OSFCM","OSFCM - sendNotification started")
         val bundle = Bundle()
         for ((key, value) in data) {
             bundle.putString(key, value)
