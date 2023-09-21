@@ -16,7 +16,7 @@ class OnNotificationOpenReceiver : BroadcastReceiver() {
         private const val TAG = "OSFirebaseCloudMessaging"
     }
 
-    private val osFCM = OSFirebaseCloudMessaging(applicationContext)
+    private val osFCM = OSFirebaseCloudMessaging()
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("OSFCM", "OSFCM - OnNotificationOpenReceiver onReceive called")

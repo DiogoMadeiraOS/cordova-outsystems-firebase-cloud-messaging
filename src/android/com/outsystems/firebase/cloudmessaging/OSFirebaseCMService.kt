@@ -60,7 +60,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
     private val CMT_SUPPORTED_DATA_MESSAGE_TYPES = listOf(RESULTS_CMT_DATA_MESSAGE_TYPE)
     private val receiverManager = OSFirebaseCloudMessageReceiverManager()
-    private val osFCM = OSFirebaseCloudMessaging(this)
+    private val osFCM = OSFirebaseCloudMessaging()
     
 
     companion object {

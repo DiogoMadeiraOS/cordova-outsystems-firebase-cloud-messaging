@@ -14,7 +14,7 @@ class OnNotificationOpenActivity : Activity() {
         private const val TAG = "OSFirebaseCloudMessaging"
     }
 
-    private val osFCM = OSFirebaseCloudMessaging(this)
+    private val osFCM = OSFirebaseCloudMessaging()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("OSFCM", "OSFCM - OnNotificationOpenActivity onCreate called")
