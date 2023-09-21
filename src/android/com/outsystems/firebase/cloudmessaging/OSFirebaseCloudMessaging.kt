@@ -68,7 +68,7 @@ class OSFirebaseCloudMessaging(private val application: Application) : CordovaIm
             }
         })
     }
-}
+
     
  
 
@@ -83,7 +83,7 @@ class OSFirebaseCloudMessaging(private val application: Application) : CordovaIm
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-    var isAppInBackground = false
+   
 
     companion object {
         private const val CHANNEL_NAME_KEY = "notification_channel_name"
@@ -321,3 +321,4 @@ class OSFirebaseCloudMessaging(private val application: Application) : CordovaIm
     }
 
 }
+
