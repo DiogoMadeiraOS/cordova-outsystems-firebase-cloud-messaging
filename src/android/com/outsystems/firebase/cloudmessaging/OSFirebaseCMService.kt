@@ -16,7 +16,9 @@ import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.net.Uri
 import android.graphics.Color
-import android.media.AudioAttributes
+import android.app.Activity
+import android.app.Application
+import android.os.Bundle
 
 import androidx.core.app.NotificationCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
@@ -58,7 +60,7 @@ class OSFirebaseCMService : FirebaseMessagingService() {
     private val RESULTS_CMT_DATA_MESSAGE_TYPE = "RESULTS"
     private val CMT_SUPPORTED_DATA_MESSAGE_TYPES = listOf(RESULTS_CMT_DATA_MESSAGE_TYPE)
     private val receiverManager = OSFirebaseCloudMessageReceiverManager()
-    private val osFCM = OSFirebaseCloudMessaging()
+    private val osFCM = OSFirebaseCloudMessaging(this)
     
 
     companion object {
