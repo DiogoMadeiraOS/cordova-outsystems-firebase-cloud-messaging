@@ -53,7 +53,7 @@ import org.json.JSONArray
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class OSFirebaseCMService : PushMessageIntentService() {
+class OSFirebaseCMService : FirebaseMessagingService() {
     
     private val CMT_DATA_MESSAGE_TYPE_KEY = "trigger_type"
     private val CMT_DATA_MESSAGE_CUSTOM_TEXT_KEY = "custom_text"
