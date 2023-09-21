@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.ContentResolver
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.text.TextUtils
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
+import android.media.AudioAttributes
 import android.net.Uri
 import android.graphics.Color
 import android.app.Activity
