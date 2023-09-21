@@ -25,53 +25,10 @@ import org.apache.cordova.CordovaWebView
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
+import kotlin.booleanArrayOf
 
 
 class OSFirebaseCloudMessaging : CordovaPlugin() {
-
-
-    init {
-        // Initialize other components as needed
-        registerActivityLifecycleCallbacks()
-    }
-
-    private var isAppInBackground = false
-
-    private fun registerActivityLifecycleCallbacks() {
-        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                isAppInBackground = false
-            }
-
-            override fun onActivityStarted(activity: Activity) {
-                isAppInBackground = true
-            }
-
-            override fun onActivityResumed(activity: Activity) {
-                isAppInBackground = false
-            }
-
-            override fun onActivityPaused(activity: Activity) {
-                isAppInBackground = true
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-                isAppInBackground = true
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                // Implementation for save instance state
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-                // Implementation for activity destroyed
-            }
-        })
-    }
-
-    
- 
-
 
     override var callbackContext: CallbackContext? = null
     private var tokenRefreshCallbackContext: CallbackContext? = null
@@ -83,7 +40,7 @@ class OSFirebaseCloudMessaging : CordovaPlugin() {
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
     private var notificationPermission = OSNotificationPermissions()
-   
+    private var isAppInBackground: Boolean = false
 
     companion object {
         private const val CHANNEL_NAME_KEY = "notification_channel_name"
@@ -107,6 +64,16 @@ class OSFirebaseCloudMessaging : CordovaPlugin() {
         val intent = getActivity().intent
         handleIntent(intent)
     }
+    override fun onResume(multitasking: Boolean) {
+        super.onResume(multitasking)
+        isAppInBackground = false
+    }
+
+    override fun onPause(multitasking: Boolean) {
+        super.onResume(multitasking)
+        isAppInBackground = true
+    }
+
 
     fun isInBackground(): Boolean {
         return isAppInBackground
