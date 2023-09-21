@@ -17,6 +17,9 @@ import com.outsystems.plugins.firebasemessaging.model.FirebaseMessagingError
 import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManager
 import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManagerInterface
 import com.outsystems.plugins.oscordova.CordovaImplementation
+
+import com.outsystems.firebase.cloudmessaging.OSFirebaseCMService
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import org.apache.cordova.CallbackContext
@@ -27,6 +30,8 @@ import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import kotlin.booleanArrayOf
 
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 
 class OSFirebaseCloudMessaging : CordovaImplementation() {
 
@@ -36,6 +41,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private lateinit var messagingManager : FirebaseMessagingManagerInterface
     private lateinit var controller : FirebaseMessagingController
     private lateinit var databaseManager: DatabaseManagerInterface
+    private val service : OSFirebaseCMService()
 
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
@@ -43,6 +49,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var isAppInBackground: Boolean = false
 
     companion object {
+        private var notificationStack: ArrayList<Bundle>? = null
         private const val CHANNEL_NAME_KEY = "notification_channel_name"
         private const val CHANNEL_DESCRIPTION_KEY = "notification_channel_description"
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
@@ -54,15 +61,33 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         Log.d("OSFCM","OSFCM - FCM initialize started")
 
         super.initialize(cordova, webView)
-        databaseManager = DatabaseManager.getInstance(getActivity())
+        /*databaseManager = DatabaseManager.getInstance(getActivity())
         notificationManager = FirebaseNotificationManager(getActivity(), databaseManager)
         messagingManager = FirebaseMessagingManager()
         controller = FirebaseMessagingController(controllerDelegate, messagingManager, notificationManager)
+        service = OSFirebaseCMService()
+
 
         setupChannelNameAndDescription()
 
         val intent = getActivity().intent
-        handleIntent(intent)
+        handleIntent(intent)*/
+      
+        val extras = cordova.activity.intent.extras
+        cordova.threadPool.execute {
+            Log.d(TAG, "Starting Firebase plugin")
+            if (extras != null && extras.size() > 1) {
+                if (notificationStack == null) {
+                    notificationStack = ArrayList()
+                }
+                if (extras.containsKey("google.message_id")) {
+                    extras.putBoolean("tap", true)
+                    notificationStack.add(extras)
+                }
+            }
+        }
+}
+
     }
 
     fun isInBackground(): Boolean {
@@ -91,7 +116,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
-    private val controllerDelegate = object: FirebaseMessagingInterface {
+    /*private val controllerDelegate = object: FirebaseMessagingInterface {
         override fun callback(result: String) {
             Log.d("OSFCM","OSFCM - FCM callback started with $result")
             sendPluginResult(result)
@@ -100,7 +125,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             Log.d("OSFCM","OSFCM - FCM callbackNotifyApp")
             val js = "cordova.plugins.OSFirebaseCloudMessaging.fireEvent(" +
                     "\"" + event + "\"," + result + ");"
-            if(deviceReady) {
+            if(deviceReady) {                
                 triggerEvent(js)
             }
             else {
@@ -120,7 +145,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
             sendPluginResult(null, Pair(formatErrorCode(error.code), error.description))
         }
-    }
+    }*/
 
     private fun ready() {
         Log.d("OSFCM","OSFCM - FCM ready started")
@@ -140,6 +165,22 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }*/
 
     }
+    override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    val data = intent.extras
+
+    if (data != null && data.containsKey("google.message_id")) {
+         val jsonArray = JSONArray()
+
+            jsonArray.put(getCurrentBadgeNumber(applicationContext) as Any)
+            jsonArray.put(title as Any)
+            jsonArray.put(messageBody as Any)
+            jsonArray.put("OnNewIntent test" as Any)
+            jsonArray.put("Okuvisir" as Any)
+        sendLocalNotification(jsonArray)
+    }
+}
+
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         this.callbackContext = callbackContext
