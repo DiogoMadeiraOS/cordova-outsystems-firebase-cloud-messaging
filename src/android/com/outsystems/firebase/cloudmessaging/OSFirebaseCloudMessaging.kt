@@ -27,19 +27,18 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray
 
 
-class OSFirebaseCloudMessaging : CordovaImplementation() {
+class OSFirebaseCloudMessaging(private val application: Application) : CordovaImplementation() {
 
 
-    fun onCreate() {
-        Log.d("OSFCM", "OSFCM FCM onCreate Started")
+    init {
         // Initialize other components as needed
+        registerActivityLifecycleCallbacks()
+    }
 
-        // Get a reference to the Application instance
-        val application = applicationContext as Application
+    private var isAppInBackground = false
 
-        // Register an ActivityLifecycleCallbacks listener
+    private fun registerActivityLifecycleCallbacks() {
         application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
-
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 isAppInBackground = false
             }
@@ -53,15 +52,23 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             }
 
             override fun onActivityPaused(activity: Activity) {
-                isAppInBackground = true 
+                isAppInBackground = true
             }
 
             override fun onActivityStopped(activity: Activity) {
                 isAppInBackground = true
             }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+                // Implementation for save instance state
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                // Implementation for activity destroyed
+            }
         })
     }
-
+}
     
  
 

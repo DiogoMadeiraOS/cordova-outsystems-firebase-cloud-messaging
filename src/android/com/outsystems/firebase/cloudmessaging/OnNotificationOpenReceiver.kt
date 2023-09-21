@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.app.Application
+import android.app.Activity
 import android.util.Log
 import org.json.JSONArray
 
@@ -14,7 +16,7 @@ class OnNotificationOpenReceiver : BroadcastReceiver() {
         private const val TAG = "OSFirebaseCloudMessaging"
     }
 
-    private val osFCM = OSFirebaseCloudMessaging()
+    private val osFCM = OSFirebaseCloudMessaging(applicationContext)
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("OSFCM", "OSFCM - OnNotificationOpenReceiver onReceive called")
