@@ -1,5 +1,6 @@
 package com.outsystems.firebase.cloudmessaging;
 
+import android.util.Log
 import com.google.firebase.messaging.RemoteMessage
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
 

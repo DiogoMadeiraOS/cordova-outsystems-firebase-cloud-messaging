@@ -30,8 +30,8 @@ import org.json.JSONArray
 class OSFirebaseCloudMessaging : CordovaImplementation() {
 
 
-    override fun onCreate() {
-        super.onCreate()
+    fun onCreate() {
+        Log.d("OSFCM", "OSFCM FCM onCreate Started")
         // Initialize other components as needed
 
         // Get a reference to the Application instance
@@ -39,7 +39,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         // Register an ActivityLifecycleCallbacks listener
         application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
-            
+
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 isAppInBackground = false
             }
