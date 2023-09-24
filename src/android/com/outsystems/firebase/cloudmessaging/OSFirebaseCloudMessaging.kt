@@ -18,7 +18,6 @@ import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManager
 import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManagerInterface
 import com.outsystems.plugins.oscordova.CordovaImplementation
 
-import com.outsystems.firebase.cloudmessaging.OSFirebaseCMService
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -41,7 +40,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private lateinit var messagingManager : FirebaseMessagingManagerInterface
     private lateinit var controller : FirebaseMessagingController
     private lateinit var databaseManager: DatabaseManagerInterface
-    private val service = OSFirebaseCMService()
+
 
     private var deviceReady: Boolean = false
     private val eventQueue: MutableList<String> = mutableListOf()
