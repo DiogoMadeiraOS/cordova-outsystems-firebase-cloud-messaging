@@ -49,9 +49,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     private var isAppInBackground: Boolean = false
 
     companion object {
-        private var notificationStack = notificationStack as? ArrayList<Bundle>
-        private const val CHANNEL_NAME_KEY = "notification_channel_name"
-        private const val CHANNEL_DESCRIPTION_KEY = "notification_channel_description"
+        private const val CHANNEL_NAME_KEY = "Services"
+        private const val CHANNEL_DESCRIPTION_KEY = "Services"
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
