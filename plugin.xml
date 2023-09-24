@@ -84,7 +84,7 @@
       <uses-permission android:name="android.permission.WAKE_LOCK" />
       <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     </config-file>
-    
+
     <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementService" />
     <service android:name="com.outsystems.firebase.cloudmessaging.OSFirebaseCMService" android:stopWithTask="false" android:exported="false"> 
       <intent-filter> 
@@ -93,8 +93,8 @@
     </service>
 
     <config-file parent="/resources" target="res/values/strings.xml">
-      <string name="default_notification_channel_name">default_notification_channel_name</string>
-      <string name="default_notification_channel_description">default_notification_channel_description</string>
+      <string name="default_notification_channel_name">Services</string>
+      <string name="default_notification_channel_description">Services</string>
     </config-file>
 
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCMService.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
