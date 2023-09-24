@@ -174,159 +174,17 @@ class OSFirebaseCMService : FirebaseMessagingService() {
                 ) || !TextUtils.isEmpty(title))
             Log.d("OSFCM", "showNotification: " + if (showNotification) "true" else "false")
             
-            sendNotification( id, title, text, data, showNotification, sound, lights)
-        }
-    }
-
-    private fun sendNotification(
-        id: String,
-        title: String,
-        messageBody: String,
-        data: Map<String, String>,
-        showNotification: Boolean,
-        sound: String?,
-        lights: String?
-    ) {
-        Log.d("OSFCM","OSFCM - sendNotification started")
-        val bundle = Bundle()
-        for ((key, value) in data) {
-            bundle.putString(key, value)
-        }
-    
-        if (showNotification) {
-            val pendingIntent: PendingIntent
-            if (android.os.Build.VERSION.SDK_INT >= 31) {
-                val intent = Intent(this, onNotifOpenActvity::class.java)
-                intent.putExtras(bundle)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            } else {
-                val intent = Intent(this, onNotifOpenReceiver::class.java)
-                intent.putExtras(bundle)
-                pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            }
-    
-            val channelId = getStringResource("default_notification_channel_id")
-            val channelName = getStringResource("default_notification_channel_name")
-            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-    
-            val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            notificationBuilder
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(messageBody))
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-    
-            if (title.isEmpty() && android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
-                val stringId = applicationInfo.labelRes
-                val appName = if (stringId == 0) applicationInfo.nonLocalizedLabel.toString() else getString(stringId)
-                notificationBuilder.setContentTitle(appName)
-            }
-    
-            val resID = resources.getIdentifier("notification_icon", "drawable", packageName)
-            if (resID != 0) {
-                notificationBuilder.setSmallIcon(resID)
-            } else {
-                if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    val resID = resources.getIdentifier("icon", "mipmap", packageName)
-                    if (resID != 0) {
-                        notificationBuilder.setSmallIcon(resID)
-                        notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(resources, resID))
-                    } else {
-                        notificationBuilder.setSmallIcon(applicationInfo.icon)
-                    }
-                } else {
-                    notificationBuilder.setSmallIcon(applicationInfo.icon)
-                }
-            }
-    
-            if (sound != null) {
-                Log.d("OSFCM", "sound before path is: $sound")
-                val soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://$packageName/raw/$sound")
-                Log.d("OSFCM", "Parsed sound is: $soundPath")
-                notificationBuilder.setSound(soundPath)
-            } else {
-                Log.d("OSFCM", "Sound was null")
-            }
-    
-            var lightArgb = 0
-            if (lights != null) {
-                try {
-                    val lightsComponents = lights.replace("\\s".toRegex(), "").split(",")
-                    if (lightsComponents.size == 3) {
-                        lightArgb = Color.parseColor(lightsComponents[0])
-                        val lightOnMs = lightsComponents[1].toInt()
-                        val lightOffMs = lightsComponents[2].toInt()
-                        notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs)
-                    }
-                } catch (e: Exception) {
-                }
-            }
-    
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                val accentID = resources.getIdentifier("accent", "color", packageName)
-                Log.d("OSFCM", "AccentId: ${Integer.toString(accentID)}")
-                notificationBuilder.setColor(resources.getColor(accentID, null))
-            }
-    
-            val notification = notificationBuilder.build()
-    
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                val iconID = android.R.id.icon
-                val notiID = resources.getIdentifier("notification_big", "drawable", packageName)
-                if (notification.contentView != null) {
-                    notification.contentView.setImageViewResource(iconID, notiID)
-                }
-            }
-    
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                val channels = notificationManager.notificationChannels
-                var channelExists = false
-                for (i in channels.indices) {
-                    if (channelId == channels[i].id) {
-                        channelExists = true
-                    }
-                }
-                if (!channelExists) {
-                    val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-                    channel.enableLights(true)
-                    channel.enableVibration(true)
-                    channel.setShowBadge(true)
-                    if (lights != null) {
-                        Log.d("OSFCM", "lightArgb: ${Integer.toString(lightArgb)}")
-                        channel.lightColor = lightArgb
-                    }
-                    if (sound != null) {
-                        val attributes = AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .build()
-                        val soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://$packageName/raw/$sound")
-                        channel.setSound(soundPath, attributes)
-                    }
-                    notificationManager.createNotificationChannel(channel)
-                }
-            }
-    
-            notificationManager.notify(id.hashCode(), notification)
-        } else {
-
-            val jsonArray = JSONArray()
+            var jsonArray = JSONArray()
 
             jsonArray.put(getCurrentBadgeNumber(applicationContext) as Any)
             jsonArray.put(title as Any)
-            jsonArray.put(messageBody as Any)
-            jsonArray.put("Services" as Any)
-            jsonArray.put("Services" as Any)
+            jsonArray.put(text as Any)
+            jsonArray.put("Services")
+            jsonArray.put("Services")
+
             osFCM.sendLocalNotification(jsonArray)
         }
     }
-    
 
 
 

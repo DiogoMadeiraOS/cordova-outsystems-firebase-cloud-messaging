@@ -61,7 +61,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         Log.d("OSFCM","OSFCM - FCM initialize started")
 
         super.initialize(cordova, webView)
-        /*databaseManager = DatabaseManager.getInstance(getActivity())
+        databaseManager = DatabaseManager.getInstance(getActivity())
         notificationManager = FirebaseNotificationManager(getActivity(), databaseManager)
         messagingManager = FirebaseMessagingManager()
         controller = FirebaseMessagingController(controllerDelegate, messagingManager, notificationManager)
@@ -71,7 +71,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         setupChannelNameAndDescription()
 
         val intent = getActivity().intent
-        handleIntent(intent)*/
+        handleIntent(intent)
     }
 
     fun isInBackground(): Boolean {
@@ -100,7 +100,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
-    /*private val controllerDelegate = object: FirebaseMessagingInterface {
+    private val controllerDelegate = object: FirebaseMessagingInterface {
         override fun callback(result: String) {
             Log.d("OSFCM","OSFCM - FCM callback started with $result")
             sendPluginResult(result)
@@ -129,7 +129,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
             sendPluginResult(null, Pair(formatErrorCode(error.code), error.description))
         }
-    }*/
+    }
 
     private fun ready() {
         Log.d("OSFCM","OSFCM - FCM ready started")
