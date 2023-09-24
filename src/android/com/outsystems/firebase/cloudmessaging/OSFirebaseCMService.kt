@@ -36,8 +36,6 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlin.collections.*
 import com.outsystems.firebase.cloudmessaging.OSFirebaseCloudMessageReceiverManager
 
-import com.outsystems.firebase.cloudmessaging.OnNotificationOpenActivity
-import com.outsystems.firebase.cloudmessaging.OnNotificationOpenReceiver
 
 import me.leolin.shortcutbadger.ShortcutBadger
 
@@ -179,9 +177,6 @@ class OSFirebaseCMService : FirebaseMessagingService() {
             sendNotification( id, title, text, data, showNotification, sound, lights)
         }
     }
-
-    val onNotifOpenActvity = OnNotificationOpenActivity()
-    val onNotifOpenReceiver = OnNotificationOpenReceiver()
 
     private fun sendNotification(
         id: String,
