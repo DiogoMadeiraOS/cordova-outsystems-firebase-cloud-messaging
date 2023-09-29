@@ -15,6 +15,8 @@
     [self application:application firebaseCloudMessagingPluginDidFinishLaunchingWithOptions:launchOptions];    
 
     (void)[FirebaseMessagingApplicationDelegate.shared application:application didFinishLaunchingWithOptions:launchOptions];
+    [UNUserNotificationCenter currentNotificationCenter].delegate = self;    
+    [FIRMessaging messaging].delegate = self;
     
     return YES;
 }
